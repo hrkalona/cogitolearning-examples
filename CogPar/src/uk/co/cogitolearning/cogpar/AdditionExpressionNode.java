@@ -24,6 +24,7 @@
 
 package uk.co.cogitolearning.cogpar;
 
+
 /**
  * An ExpressionNode that handles additions and subtractions. The node can hold
  * an arbitrary number of terms that are either added or subtraced from the sum.
@@ -64,15 +65,15 @@ public class AdditionExpressionNode extends SequenceExpressionNode
    * 
    * All the terms are evaluated and added or subtracted from the total sum.
    */
-  public double getValue()
+  public Complex getValue()
   {
-    double sum = 0.0;
+    Complex sum = new Complex();
     for (Term t : terms)
     {
       if (t.positive)
-        sum += t.expression.getValue();
+        sum.plus_mutable(t.expression.getValue());
       else
-        sum -= t.expression.getValue();
+        sum.sub_mutable(t.expression.getValue());
     }
     return sum;
   }

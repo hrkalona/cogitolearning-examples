@@ -24,6 +24,7 @@
 
 package uk.co.cogitolearning.cogpar;
 
+
 /**
  * An interface for expression nodes.
  * 
@@ -33,8 +34,8 @@ public interface ExpressionNode
 {
   /** Node id for variable nodes */
   public static final int VARIABLE_NODE = 1;
-  /** Node id for constant nodes */
-  public static final int CONSTANT_NODE = 2;
+  /** Node id for real constant nodes */
+  public static final int REAL_CONSTANT_NODE = 2;
   /** Node id for addition nodes */
   public static final int ADDITION_NODE = 3;
   /** Node id for multiplication nodes */
@@ -43,6 +44,8 @@ public interface ExpressionNode
   public static final int EXPONENTIATION_NODE = 5;
   /** Node id for function nodes */
   public static final int FUNCTION_NODE = 6;
+  /** Node id for imaginary constant nodes */
+  public static final int IMAGINARY_CONSTANT_NODE = 7;
 
   /**
    * Returns the type of the node.ExpressionNode
@@ -61,7 +64,7 @@ public interface ExpressionNode
    * 
    * @return value of expression
    */
-  public double getValue();
+  public Complex getValue();
   
   /**
    * Method needed for the visitor design pattern

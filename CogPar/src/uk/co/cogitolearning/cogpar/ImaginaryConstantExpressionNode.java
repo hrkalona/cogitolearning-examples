@@ -26,61 +26,62 @@ package uk.co.cogitolearning.cogpar;
 
 
 /**
- * A visitor that sets a variable with a specific name to a given value
+ * An ExpressionNode that stores a constant value
  */
-public class SetVariable implements ExpressionNodeVisitor
+public class ImaginaryConstantExpressionNode implements ExpressionNode
 {
-
-  private String name;
+  /** The value of the constant */
   private Complex value;
 
   /**
-   * Construct the visitor with the name and the value of the variable to set
+   * Construct with the fixed value.
    * 
-   * @param name
-   *          the name of the variable
    * @param value
-   *          the value of the variable
+   *          the value of the constant
    */
-  public SetVariable(String name, Complex value)
+  public ImaginaryConstantExpressionNode(Complex value)
   {
-    super();
-    this.name = name;
     this.value = value;
   }
 
   /**
-   * Checks the nodes name against the name to set and sets the value if the two
-   * strings match
+   * Convenience constructor that takes a string and converts it to a double
+   * before storing the value.
+   * 
+   * @param value
+   *          the string representation of the value
    */
-  public void visit(VariableExpressionNode node)
-  {
-    if (node.getName().equals(name))
-      node.setValue(value);
+  public ImaginaryConstantExpressionNode(String value)
+  {     
+      this.value = new Complex(0, Double.valueOf(value));
   }
 
-  /** Do nothing */
-  public void visit(RealConstantExpressionNode node)
-  {}
-  
-  /** Do nothing */
-  public void visit(ImaginaryConstantExpressionNode node)
-  {}
+  /**
+   * Returns the value of the constant
+   */
+  public Complex getValue()
+  {
+    return value;
+  }
 
-  /** Do nothing */
-  public void visit(AdditionExpressionNode node)
-  {}
+  /**
+   * Returns the type of the node, in this case ExpressionNode.CONSTANT_NODE
+   */
+  public int getType()
+  {
+    return ExpressionNode.IMAGINARY_CONSTANT_NODE;
+  }
 
-  /** Do nothing */
-  public void visit(MultiplicationExpressionNode node)
-  {}
-
-  /** Do nothing */
-  public void visit(ExponentiationExpressionNode node)
-  {}
-
-  /** Do nothing */
-  public void visit(FunctionExpressionNode node)
-  {}
-
+  /**
+   * Implementation of the visitor design pattern.
+   * 
+   * Calls visit on the visitor.
+   * 
+   * @param visitor
+   *          the visitor
+   */
+  public void accept(ExpressionNodeVisitor visitor)
+  {
+    visitor.visit(this);
+  }
 }

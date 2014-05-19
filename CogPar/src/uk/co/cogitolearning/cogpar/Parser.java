@@ -44,6 +44,8 @@
 package uk.co.cogitolearning.cogpar;
 
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
+import java.util.StringTokenizer;
 
 /**
  * A parser for mathematical expressions. The parser class defines a method
@@ -73,7 +75,7 @@ public class Parser
    *         expression tree made out of ExpressionNode objects
    */
   public ExpressionNode parse(String expression)
-  {
+  {   
     Tokenizer tokenizer = Tokenizer.getExpressionTokenizer();
     tokenizer.tokenize(expression);
     LinkedList<Token> tokens = tokenizer.getTokens();
@@ -93,13 +95,19 @@ public class Parser
   {
     // implementing a recursive descent parser
     this.tokens = (LinkedList<Token>) tokens.clone();
-    lookahead = this.tokens.getFirst();
+    
+    try {
+        lookahead = this.tokens.getFirst();
+    }
+    catch(NoSuchElementException ex) {
+        throw new ParserException("No input found.");
+    }
 
     // top level non-terminal is expression
     ExpressionNode expr = expression();
     
     if (lookahead.token != Token.EPSILON)
-      throw new ParserException("Unexpected symbol %s found", lookahead);
+      throw new ParserException("Unexpected symbol %s found.", lookahead);
     
     return expr;
   }
@@ -227,7 +235,7 @@ public class Parser
     if (lookahead.token == Token.FUNCTION)
     {
       int function = FunctionExpressionNode.stringToFunction(lookahead.sequence);
-      if (function < 0) throw new ParserException("Unexpected Function %s found", lookahead);
+      if (function < 0) throw new ParserException("Unexpected Function %s found.", lookahead);
       nextToken();
       ExpressionNode expr = argument();
       return new FunctionExpressionNode(function, expr);
@@ -238,7 +246,7 @@ public class Parser
       nextToken();
       ExpressionNode expr = expression();
       if (lookahead.token != Token.CLOSE_BRACKET)
-        throw new ParserException("Closing brackets expected", lookahead);
+        throw new ParserException("Closing brackets expected.", lookahead);
       nextToken();
       return expr;
     }
@@ -250,26 +258,41 @@ public class Parser
   /** handles the non-terminal value */
   private ExpressionNode value()
   {
-    // argument -> NUMBER
-    if (lookahead.token == Token.NUMBER)
+    // argument -> REAL_NUMBER
+    if (lookahead.token == Token.REAL_NUMBER)
     {
-      ExpressionNode expr = new ConstantExpressionNode(lookahead.sequence);
+      ExpressionNode expr = new RealConstantExpressionNode(lookahead.sequence);
+      nextToken();
+      return expr;
+    }
+    
+    // argument -> IMAGINARY_NUMBER
+    if (lookahead.token == Token.IMAGINARY_NUMBER)
+    {
+      StringTokenizer tok = new StringTokenizer(lookahead.sequence, "i");
+      ExpressionNode expr;
+      if(tok.hasMoreTokens()) {
+          expr = new ImaginaryConstantExpressionNode(tok.nextToken());
+      }
+      else {
+          expr = new ImaginaryConstantExpressionNode("1.0"); 
+      }
       nextToken();
       return expr;
     }
 
     // argument -> VARIABLE
     if (lookahead.token == Token.VARIABLE)
-    {
+    {       
       ExpressionNode expr = new VariableExpressionNode(lookahead.sequence);
       nextToken();
       return expr;
     }
 
     if (lookahead.token == Token.EPSILON)
-      throw new ParserException("Unexpected end of input");
+      throw new ParserException("Unexpected end of input.");
     else
-      throw new ParserException("Unexpected symbol %s found", lookahead);
+      throw new ParserException("Unexpected symbol %s found.", lookahead);
   }
 
   /**
@@ -284,4 +307,5 @@ public class Parser
     else
       lookahead = tokens.getFirst();
   }
+
 }

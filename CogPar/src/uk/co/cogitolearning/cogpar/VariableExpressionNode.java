@@ -32,7 +32,7 @@ public class VariableExpressionNode implements ExpressionNode
   /** The name of the variable */
   private String name;
   /** The value of the variable */
-  private double value;
+  private Complex value;
   /** indicates if the value has been set */
   private boolean valueSet;
 
@@ -70,7 +70,7 @@ public class VariableExpressionNode implements ExpressionNode
    * @param value
    *          the value of the variable
    */
-  public void setValue(double value)
+  public void setValue(Complex value)
   {
     this.value = value;
     this.valueSet = true;
@@ -80,7 +80,7 @@ public class VariableExpressionNode implements ExpressionNode
    * Returns the value of the variable but throws an exception if the value has
    * not been set
    */
-  public double getValue()
+  public Complex getValue()
   {
     if (valueSet)
       return value;

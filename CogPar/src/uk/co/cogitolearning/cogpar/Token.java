@@ -48,10 +48,12 @@ public class Token
   public static final int OPEN_BRACKET = 5;
   /** Token id for closing brackets */
   public static final int CLOSE_BRACKET = 6;
-  /** Token id for numbers */
-  public static final int NUMBER = 7;
+  /** Token id for real numbers */
+  public static final int REAL_NUMBER = 7;
   /** Token id for variable names */
   public static final int VARIABLE = 8;
+  /** Token id for imaginary numbers */
+  public static final int IMAGINARY_NUMBER = 9;
 
   /** the token identifier */
   public final int token;

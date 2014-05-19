@@ -24,6 +24,7 @@
 
 package uk.co.cogitolearning.cogpar;
 
+
 /**
  * An ExpressionNode that handles exponentiation. The node holds
  * a base and an exponent and calulates base^exponent 
@@ -60,9 +61,43 @@ public class ExponentiationExpressionNode implements ExpressionNode
    * 
    * Calculates base^exponent
    */
-  public double getValue()
+  public Complex getValue()
   {
-    return Math.pow(base.getValue(), exponent.getValue());
+      Complex zexponent = exponent.getValue();
+      
+      if(zexponent.getIm() == 0) {
+          if(zexponent.getRe() == 2) {
+              return base.getValue().square();
+          }
+          else if(zexponent.getRe() == 3) {
+              return base.getValue().cube();
+          }
+          else if(zexponent.getRe() == 4) {
+              return base.getValue().fourth();
+          }
+          else if(zexponent.getRe() == 5) {
+              return base.getValue().fifth();
+          }
+          else if(zexponent.getRe() == 6) {
+              return base.getValue().sixth();
+          }
+          else if(zexponent.getRe() == 7) {
+              return base.getValue().seventh();
+          }
+          else if(zexponent.getRe() == 8) {
+              return base.getValue().eighth();
+          }
+          else if(zexponent.getRe() == 9) {
+              return base.getValue().ninth();
+          }
+          else if(zexponent.getRe() == 10) {
+              return base.getValue().tenth();
+          }
+          return base.getValue().pow(exponent.getValue().getRe());
+      }
+      else {
+          return base.getValue().pow(zexponent);
+      }
   }
 
   /**

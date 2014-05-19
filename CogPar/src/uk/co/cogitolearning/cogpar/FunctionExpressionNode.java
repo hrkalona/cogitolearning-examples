@@ -24,6 +24,8 @@
 
 package uk.co.cogitolearning.cogpar;
 
+
+
 /**
  * An ExpressionNode that handles mathematical functions.
  * 
@@ -31,31 +33,89 @@ package uk.co.cogitolearning.cogpar;
  */
 public class FunctionExpressionNode implements ExpressionNode
 {
-  /** function id for the sin function */
-  public static final int SIN = 1;
-  /** function id for the cos function */
-  public static final int COS = 2;
-  /** function id for the tan function */
-  public static final int TAN = 3;
-
-  /** function id for the asin function */
-  public static final int ASIN = 4;
-  /** function id for the acos function */
-  public static final int ACOS = 5;
-  /** function id for the atan function */
-  public static final int ATAN = 6;
 
   /** function id for the sqrt function */
-  public static final int SQRT = 7;
+  public static final int SQRT = 1;
   /** function id for the exp function */
-  public static final int EXP = 8;
+  public static final int EXP = 2;
 
   /** function id for the ln function */
-  public static final int LN = 9;
+  public static final int LN = 3;
+  
+  /** function id for the abs function */
+  public static final int ABS = 4;
+
+  
+  /** function id for the sin function */
+  public static final int SIN = 5;
+  /** function id for the asin function */
+  public static final int ASIN = 6;
+  /** function id for the sinh function */
+  public static final int SINH = 7;
+  /** function id for the asinh function */
+  public static final int ASINH = 8;
+  
+  /** function id for the cos function */
+  public static final int COS = 9;
+  /** function id for the acos function */
+  public static final int ACOS = 10;
+  /** function id for the cosh function */
+  public static final int COSH = 11;
+  /** function id for the acosh function */
+  public static final int ACOSH = 12;
+  
+  /** function id for the tan function */
+  public static final int TAN = 13;
+  /** function id for the tanh function */
+  public static final int TANH = 14;
+  /** function id for the atan function */
+  public static final int ATAN = 15;
+  /** function id for the atanth function */
+  public static final int ATANH = 16;
+  
+  /** function id for the cot function */
+  public static final int COT = 17;
+  /** function id for the coth function */
+  public static final int COTH = 18;
+  /** function id for the acot function */
+  public static final int ACOT = 19;
+  /** function id for the acoth function */
+  public static final int ACOTH = 20;
+  
+  /** function id for the sec function */
+  public static final int SEC = 21;
+  /** function id for the sech function */
+  public static final int SECH = 22;
+  /** function id for the asec function */
+  public static final int ASEC = 23;
+  /** function id for the asech function */
+  public static final int ASECH = 24;
+ 
+  /** function id for the csc function */
+  public static final int CSC = 25;
+  /** function id for the acsc function */
+  public static final int ACSC = 26;
+  /** function id for the csch function */
+  public static final int CSCH = 27;
+  /** function id for the acsch function */
+  public static final int ACSCH = 28;
+  
+  /** function id for the conj function */
+  public static final int CONJ = 29;
+  
   /** function id for the log function */
-  public static final int LOG = 10;
+  public static final int LOG = 30;
   /** function id for the log2 function */
-  public static final int LOG2 = 11;
+  public static final int LOG2 = 31;
+  
+  /** function id for the real part function */
+  public static final int RE = 32;
+  
+  /** function id for the imaginary part function */
+  public static final int IM = 33;
+  
+  /** function id for the norm function */
+  public static final int NORM = 34;
 
   /** the id of the function to apply to the argument */
   private int function;
@@ -99,31 +159,83 @@ public class FunctionExpressionNode implements ExpressionNode
   {
     if (str.equals("sin"))
       return FunctionExpressionNode.SIN;
-    if (str.equals("cos"))
-      return FunctionExpressionNode.COS;
-    if (str.equals("tan"))
-      return FunctionExpressionNode.TAN;
-
+    if (str.equals("sinh"))
+      return FunctionExpressionNode.SINH;
     if (str.equals("asin"))
       return FunctionExpressionNode.ASIN;
+    if (str.equals("asinh"))
+      return FunctionExpressionNode.ASINH;
+    
+    if (str.equals("cos"))
+      return FunctionExpressionNode.COS;
+    if (str.equals("cosh"))
+      return FunctionExpressionNode.COSH;
     if (str.equals("acos"))
       return FunctionExpressionNode.ACOS;
+    if (str.equals("cosh"))
+      return FunctionExpressionNode.ACOSH;
+    
+    if (str.equals("tan"))
+      return FunctionExpressionNode.TAN;
+    if (str.equals("tanh"))
+      return FunctionExpressionNode.TANH;
     if (str.equals("atan"))
       return FunctionExpressionNode.ATAN;
+    if (str.equals("atanh"))
+      return FunctionExpressionNode.ATANH;
+
+    if (str.equals("cot"))
+      return FunctionExpressionNode.COT;
+    if (str.equals("coth"))
+      return FunctionExpressionNode.COTH;
+    if (str.equals("acot"))
+      return FunctionExpressionNode.ACOT;
+    if (str.equals("acoth"))
+      return FunctionExpressionNode.ACOTH;
+       
+    if (str.equals("sec"))
+      return FunctionExpressionNode.SEC;
+    if (str.equals("sech"))
+      return FunctionExpressionNode.SECH;
+    if (str.equals("asec"))
+      return FunctionExpressionNode.ASEC;
+    if (str.equals("asech"))
+      return FunctionExpressionNode.ASECH;
+    
+    if (str.equals("csc"))
+      return FunctionExpressionNode.CSC;
+    if (str.equals("csch"))
+      return FunctionExpressionNode.CSCH;
+    if (str.equals("acsc"))
+      return FunctionExpressionNode.ACSC;
+    if (str.equals("acsch"))
+      return FunctionExpressionNode.ACSCH;
 
     if (str.equals("sqrt"))
       return FunctionExpressionNode.SQRT;
     if (str.equals("exp"))
       return FunctionExpressionNode.EXP;
-
-    if (str.equals("ln"))
-      return FunctionExpressionNode.LN;
     if (str.equals("log"))
+      return FunctionExpressionNode.LN;
+    if (str.equals("abs"))
+      return FunctionExpressionNode.ABS;
+    if (str.equals("log10"))
       return FunctionExpressionNode.LOG;
     if (str.equals("log2"))
       return FunctionExpressionNode.LOG2;
+   
+    if (str.equals("conj"))
+      return FunctionExpressionNode.CONJ;
+    
+    if (str.equals("re"))
+      return FunctionExpressionNode.RE; 
+    if (str.equals("im"))
+      return FunctionExpressionNode.IM;
+    
+    if (str.equals("norm"))
+      return FunctionExpressionNode.NORM;
 
-    throw new ParserException("Unexpected Function " + str + " found");
+    throw new ParserException("Unexpected Function " + str + " found.");
   }
 
   /**
@@ -136,7 +248,7 @@ public class FunctionExpressionNode implements ExpressionNode
    */
   public static String getAllFunctions()
   {
-    return "sin|cos|tan|asin|acos|atan|sqrt|exp|ln|log|log2";
+      return "sin|sinh|asin|asinh|cos|cosh|acos|acosh|tan|tanh|atan|atanh|cot|coth|acot|acoth|sec|sech|asec|asech|csc|csch|acsc|acsch|sqrt|exp|log|log10|log2|abs|conj|re|im|norm";
   }
 
   /**
@@ -145,32 +257,90 @@ public class FunctionExpressionNode implements ExpressionNode
    * The argument is evaluated and then the function is applied to the resulting
    * value.
    */
-  public double getValue()
+  public Complex getValue()
   {
     switch (function)
     {
       case SIN:
-        return Math.sin(argument.getValue());
-      case COS:
-        return Math.cos(argument.getValue());
-      case TAN:
-        return Math.tan(argument.getValue());
+        return argument.getValue().sin();
+      case SINH:
+        return argument.getValue().sinh();
       case ASIN:
-        return Math.asin(argument.getValue());
+        return argument.getValue().asin();
+      case ASINH:
+        return argument.getValue().asinh();
+          
+      case COS:
+        return argument.getValue().cos();
+      case COSH:
+        return argument.getValue().cosh();
       case ACOS:
-        return Math.acos(argument.getValue());
+        return argument.getValue().acos();
+      case ACOSH:
+        return argument.getValue().acosh();
+      
+      case TAN:
+        return argument.getValue().tan();
+      case TANH:
+        return argument.getValue().tanh();
       case ATAN:
-        return Math.atan(argument.getValue());
+        return argument.getValue().atan();
+      case ATANH:
+        return argument.getValue().atanh();
+          
+      case COT:
+        return argument.getValue().cot();
+      case COTH:
+        return argument.getValue().coth();
+      case ACOT:
+        return argument.getValue().acot();
+      case ACOTH:
+        return argument.getValue().acoth();
+          
+      case SEC:
+        return argument.getValue().sec();
+      case SECH:
+        return argument.getValue().sech();
+      case ASEC:
+        return argument.getValue().asec();
+      case ASECH:
+        return argument.getValue().asech();
+          
+      case CSC:
+        return argument.getValue().csc();
+      case CSCH:
+        return argument.getValue().csch();
+      case ACSC:
+        return argument.getValue().acsc();
+      case ACSCH:
+        return argument.getValue().acsch();
+          
+      
       case SQRT:
-        return Math.sqrt(argument.getValue());
+        return argument.getValue().sqrt();
       case EXP:
-        return Math.exp(argument.getValue());
+        return argument.getValue().exp();
       case LN:
-        return Math.log(argument.getValue());
+        return argument.getValue().log();
+      case ABS:
+        return argument.getValue().abs();
       case LOG:
-        return Math.log(argument.getValue()) * 0.43429448190325182765;
+        return argument.getValue().log().times(0.43429448190325182765);
       case LOG2:
-        return Math.log(argument.getValue()) * 1.442695040888963407360;
+        return argument.getValue().log().times(1.442695040888963407360);
+          
+      case CONJ:
+        return argument.getValue().conjugate(); 
+          
+      case RE:
+        return new Complex(argument.getValue().getRe(), 0); 
+              
+      case IM:
+        return new Complex(0, argument.getValue().getIm()); 
+      
+      case NORM:
+        return new Complex(argument.getValue().norm(), 0); 
+          
     }
 
     throw new EvaluationException("Invalid function id "+function+"!");

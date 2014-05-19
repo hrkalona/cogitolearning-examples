@@ -36,8 +36,11 @@ public interface ExpressionNodeVisitor
   /** Visit a VariableExpressionNode */
   public void visit(VariableExpressionNode node);
 
-  /**  Visit a ConstantExpressionNode */
-  public void visit(ConstantExpressionNode node);
+  /**  Visit a RealConstantExpressionNode */
+  public void visit(RealConstantExpressionNode node);
+  
+  /**  Visit a ImaginaryConstantExpressionNode */
+  public void visit(ImaginaryConstantExpressionNode node);
 
   /**  Visit a AdditionExpressionNode */
   public void visit(AdditionExpressionNode node);

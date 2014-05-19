@@ -24,6 +24,7 @@
 
 package uk.co.cogitolearning.cogpar;
 
+
 /**
  * An ExpressionNode that handles multiplications and divisions. The node can hold
  * an arbitrary number of factors that are either multiplied or divided to the product.
@@ -63,15 +64,15 @@ public class MultiplicationExpressionNode extends SequenceExpressionNode
    * 
    * All the terms are evaluated and multiplied or divided to the product.
    */
-  public double getValue()
+  public Complex getValue()
   {
-    double prod = 1.0;
+    Complex prod = new Complex(1.0, 0);
     for (Term t : terms)
     {
       if (t.positive)
-        prod *= t.expression.getValue();
+        prod.times_mutable(t.expression.getValue());
       else
-        prod /= t.expression.getValue();
+        prod.divide_mutable(t.expression.getValue());
     }
     return prod;
   }
