@@ -172,7 +172,7 @@ public class FunctionExpressionNode implements ExpressionNode
       return FunctionExpressionNode.COSH;
     if (str.equals("acos"))
       return FunctionExpressionNode.ACOS;
-    if (str.equals("cosh"))
+    if (str.equals("acosh"))
       return FunctionExpressionNode.ACOSH;
     
     if (str.equals("tan"))
