@@ -25,7 +25,6 @@
 package uk.co.cogitolearning.cogpar;
 
 
-
 /**
  * An ExpressionNode that handles mathematical functions.
  * 
@@ -116,6 +115,9 @@ public class FunctionExpressionNode implements ExpressionNode
   
   /** function id for the norm function */
   public static final int NORM = 34;
+  
+  /** function id for the arg function */
+  public static final int ARG = 35;
 
   /** the id of the function to apply to the argument */
   private int function;
@@ -234,6 +236,9 @@ public class FunctionExpressionNode implements ExpressionNode
     
     if (str.equals("norm"))
       return FunctionExpressionNode.NORM;
+    
+    if (str.equals("arg"))
+      return FunctionExpressionNode.ARG;
 
     throw new ParserException("Unexpected Function " + str + " found.");
   }
@@ -248,7 +253,7 @@ public class FunctionExpressionNode implements ExpressionNode
    */
   public static String getAllFunctions()
   {
-      return "sin|sinh|asin|asinh|cos|cosh|acos|acosh|tan|tanh|atan|atanh|cot|coth|acot|acoth|sec|sech|asec|asech|csc|csch|acsc|acsch|sqrt|exp|log|log10|log2|abs|conj|re|im|norm";
+      return "sin|sinh|asin|asinh|cos|cosh|acos|acosh|tan|tanh|atan|atanh|cot|coth|acot|acoth|sec|sech|asec|asech|csc|csch|acsc|acsch|sqrt|exp|log|log10|log2|abs|conj|re|im|norm|arg";
   }
 
   /**
@@ -336,10 +341,13 @@ public class FunctionExpressionNode implements ExpressionNode
         return new Complex(argument.getValue().getRe(), 0); 
               
       case IM:
-        return new Complex(0, argument.getValue().getIm()); 
+        return new Complex(argument.getValue().getIm(), 0); 
       
       case NORM:
         return new Complex(argument.getValue().norm(), 0); 
+          
+      case ARG:
+        return new Complex(argument.getValue().arg(), 0); 
           
     }
 

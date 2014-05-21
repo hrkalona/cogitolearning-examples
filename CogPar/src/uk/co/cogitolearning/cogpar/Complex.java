@@ -719,6 +719,15 @@ public final class Complex {
     }
     
     /*
+     *  <z
+     */
+    public final double arg() {
+         
+         return Math.atan2(im, re);
+         
+    }
+    
+    /*
      *  |z1 - z2|^2
      */
     public final double distance_squared(Complex z) {
