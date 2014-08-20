@@ -285,6 +285,19 @@ public class Parser
     if (lookahead.token == Token.VARIABLE)
     {       
       ExpressionNode expr = new VariableExpressionNode(lookahead.sequence);
+      
+      if(lookahead.sequence.equalsIgnoreCase("pi")) {
+          ((VariableExpressionNode)expr).setValue(new Complex(Math.PI, 0));
+      }
+      
+      if(lookahead.sequence.equalsIgnoreCase("e")) {
+          ((VariableExpressionNode)expr).setValue(new Complex(Math.E, 0));
+      }
+      
+      if(lookahead.sequence.equalsIgnoreCase("phi")) {
+          ((VariableExpressionNode)expr).setValue(new Complex(1.618033988749895, 0));
+      }
+      
       nextToken();
       return expr;
     }

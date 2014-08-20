@@ -118,6 +118,12 @@ public class FunctionExpressionNode implements ExpressionNode
   
   /** function id for the arg function */
   public static final int ARG = 35;
+  
+  /** function id for the gamma function */
+  public static final int GAMMA = 36;
+  
+  /** function id for the fact function */
+  public static final int FACT = 37;
 
   /** the id of the function to apply to the argument */
   private int function;
@@ -239,6 +245,12 @@ public class FunctionExpressionNode implements ExpressionNode
     
     if (str.equals("arg"))
       return FunctionExpressionNode.ARG;
+    
+    if (str.equals("gamma"))
+      return FunctionExpressionNode.GAMMA;
+    
+    if (str.equals("fact"))
+      return FunctionExpressionNode.FACT;
 
     throw new ParserException("Unexpected Function " + str + " found.");
   }
@@ -253,7 +265,7 @@ public class FunctionExpressionNode implements ExpressionNode
    */
   public static String getAllFunctions()
   {
-      return "sin|sinh|asin|asinh|cos|cosh|acos|acosh|tan|tanh|atan|atanh|cot|coth|acot|acoth|sec|sech|asec|asech|csc|csch|acsc|acsch|sqrt|exp|log|log10|log2|abs|conj|re|im|norm|arg";
+      return "sin|sinh|asin|asinh|cos|cosh|acos|acosh|tan|tanh|atan|atanh|cot|coth|acot|acoth|sec|sech|asec|asech|csc|csch|acsc|acsch|sqrt|exp|log|log10|log2|abs|conj|re|im|norm|arg|gamma|fact";
   }
 
   /**
@@ -348,6 +360,12 @@ public class FunctionExpressionNode implements ExpressionNode
           
       case ARG:
         return new Complex(argument.getValue().arg(), 0); 
+          
+      case GAMMA:
+        return argument.getValue().gamma_la(); 
+              
+      case FACT:
+        return argument.getValue().factorial(); 
           
     }
 
