@@ -1315,6 +1315,153 @@ public final class Complex {
          
      }
      
+     /*
+     *  |Re(z)| + Im(z)i
+     */
+    public final Complex absre() {
+
+        return new Complex(re >= 0 ? re : -re, im);
+
+    }
+
+    /*
+     *  z = |Re(z)| + Im(z)i
+     */
+    public final Complex absre_mutable() {
+
+        re = re >= 0 ? re : -re;
+
+        return this;
+
+    }
+
+    /*
+     *  Re(z) + |Im(z)|i
+     */
+    public final Complex absim() {
+
+        return new Complex(re, im >= 0 ? im : -im);
+
+    }
+
+    /*
+     *  z = Re(z) + |Im(z)|i
+     */
+    public final Complex absim_mutable() {
+
+        im = im >= 0 ? im : -im;
+
+        return this;
+
+    }
+     
+     /*
+     * The floor of a complex number
+     */
+    public final Complex floor() {
+            
+        return new Complex(Math.floor(re), Math.floor(im));
+        
+    }
+    
+     /*
+     * z = The floor of a complex number
+     */
+    public final Complex floor_mutable() {
+            
+        re = Math.floor(re);
+        im = Math.floor(im);
+        
+        return this;
+        
+    }
+    
+    /*
+     * The ceil of a complex number
+     */
+    public final Complex ceil() {
+            
+        return new Complex(Math.ceil(re), Math.ceil(im));
+        
+    }
+    
+     /*
+     * z = The ceil of a complex number
+     */
+    public final Complex ceil_mutable() {
+            
+        re = Math.ceil(re);
+        im = Math.ceil(im);
+        
+        return this;
+        
+    }
+    
+    /*
+     * The truncate of a complex number
+     */
+    public final Complex trunc() {
+            
+        return new Complex((int)re, (int)im);
+        
+    }
+    
+     /*
+     * z = The truncate of a complex number
+     */
+    public final Complex trunc_mutable() {
+            
+        re = (int)re;
+        im = (int)im;
+        
+        return this;
+        
+    }
+   
+    
+    /*
+     * The round of a complex number
+     */
+    public final Complex round() {
+            
+        return new Complex(Math.round(re), Math.round(im));
+        
+    }
+    
+     /*
+     * z = The round of a complex number
+     */
+    public final Complex round_mutable() {
+            
+        re = Math.round(re);
+        im = Math.round(im);
+        
+        return this;
+        
+    }
+    
+    /*
+     * y + xi
+     */
+    public final Complex flip() {
+            
+        return new Complex(im, re);
+        
+    }
+    
+     /*
+     * z = y + xi
+     */
+    public final Complex flip_mutable() {
+            
+        double temp = re;
+        re = im;
+        im = temp;
+        
+        return this;
+        
+    }
+     
      @Override
      public final String toString() {
          
