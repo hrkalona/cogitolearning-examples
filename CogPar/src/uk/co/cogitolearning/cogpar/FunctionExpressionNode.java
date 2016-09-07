@@ -241,6 +241,16 @@ public class FunctionExpressionNode implements ExpressionNode {
     public static final int TRUNC = 46;
 
     /**
+     * function id for the error function
+     */
+    public static final int ERF = 47;
+
+    /**
+     * function id for the riemann zeta function
+     */
+    public static final int R_ZETA = 48;
+
+    /**
      * the id of the function to apply to the argument
      */
     private int function;
@@ -438,6 +448,14 @@ public class FunctionExpressionNode implements ExpressionNode {
             return FunctionExpressionNode.TRUNC;
         }
 
+        if(str.equals("erf")) {
+            return FunctionExpressionNode.ERF;
+        }
+
+        if(str.equals("rzeta")) {
+            return FunctionExpressionNode.R_ZETA;
+        }
+
         throw new ParserException("Unexpected Function " + str + " found.");
     }
 
@@ -450,7 +468,7 @@ public class FunctionExpressionNode implements ExpressionNode {
      * @return a string containing all the function names
      */
     public static String getAllFunctions() {
-        return "sin|sinh|asin|asinh|cos|cosh|acos|acosh|tan|tanh|atan|atanh|cot|coth|acot|acoth|sec|sech|asec|asech|csc|csch|acsc|acsch|sqrt|exp|log|log10|log2|abs|conj|re|im|norm|arg|gamma|fact|absre|absim|gi|rec|flip|round|ceil|floor|trunc";
+        return "sin|sinh|asin|asinh|cos|cosh|acos|acosh|tan|tanh|atan|atanh|cot|coth|acot|acoth|sec|sech|asec|asech|csc|csch|acsc|acsch|sqrt|exp|log|log10|log2|abs|conj|re|im|norm|arg|gamma|fact|absre|absim|gi|rec|flip|round|ceil|floor|trunc|erf|rzeta";
     }
 
     /**
@@ -575,6 +593,12 @@ public class FunctionExpressionNode implements ExpressionNode {
 
             case TRUNC:
                 return argument.getValue().trunc();
+
+            case ERF:
+                return argument.getValue().erf();
+
+            case R_ZETA:
+                return argument.getValue().riemann_zeta();
 
         }
 
