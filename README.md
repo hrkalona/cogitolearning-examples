@@ -1,4 +1,4 @@
 cogitolearning-examples
 =======================
 
-All the examples for the tutorials on the Cogito Learning website.
+A variation of the standard real number parser, updated for complex numbers.
