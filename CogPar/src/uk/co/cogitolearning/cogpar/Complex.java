@@ -440,7 +440,106 @@ public final class Complex {
         return this;
 
     }
-     
+    
+    /*
+    * z = z1 % z2
+    */
+    public final Complex modulo(Complex z) {
+        
+        return this.sub(z.times(this.divide(z).trunc()));
+        
+    }
+    
+    /*
+    * z1 = z1 % z2
+    */
+    public final Complex modulo_mutable(Complex z) {
+        
+        return this.sub_mutable(z.times(this.divide(z).trunc_mutable()));
+        
+    }
+    
+    /*
+    * z = z1 % Real
+    */
+    public final Complex modulo(double real) {
+        
+        return this.sub(this.divide(real).trunc().times(real));
+        
+    }
+    
+    /*
+    * z1 = z1 % Real
+    */
+    public final Complex modulo_mutable(double real) {
+        
+        return this.sub_mutable(this.divide(real).trunc_mutable().times_mutable(real));
+        
+    }
+    
+    /*
+    * z = z1 % Imaginary
+    */
+    public final Complex modulo_i(double imaginary) {
+        
+        return this.sub(this.divide_i(imaginary).trunc().times_i(imaginary));
+        
+    }
+    
+    /*
+    * z1 = z1 % Imaginary
+    */
+    public final Complex modulo_i_mutable(double imaginary) {
+        
+        return this.sub_mutable(this.divide_i(imaginary).trunc_mutable().times_i_mutable(imaginary));
+        
+    }
+    
+    /*
+    * z = Real % z1
+    */
+    public final Complex r_modulo(double real) {
+        
+        return (this.r_divide(real).trunc().times(this)).r_sub(real);
+        
+    }
+    
+    /*
+    * z1 = Real % z1
+    */
+    public final Complex r_modulo_mutable(double real) {
+        
+        Complex a = (this.r_divide(real).trunc().times(this)).r_sub(real);
+        
+        re = a.re;
+        im = a.im;
+        
+        return this;
+        
+    }
+    
+    /*
+    * z = Imaginary % z1
+    */
+    public final Complex i_modulo(double imaginary) {
+        
+        return (this.i_divide(imaginary).trunc().times(this)).i_sub(imaginary);
+        
+    }
+    
+    /*
+    * z1 = Imaginary % z1
+    */
+    public final Complex i_modulo_mutable(double imaginary) {
+        
+        Complex a = (this.i_divide(imaginary).trunc().times(this)).i_sub(imaginary);
+        
+        re = a.re;
+        im = a.im;
+        
+        return this;
+        
+    }     
 
     /*
      *  1 / z

@@ -141,14 +141,14 @@ public class Parser {
                 sum = (AdditionExpressionNode)expr;
             }
             else {
-                sum = new AdditionExpressionNode(expr, true);
+                sum = new AdditionExpressionNode(expr, AdditionExpressionNode.ADD);
             }
 
             // reduce the input and recursively call sum_op
-            boolean positive = lookahead.sequence.equals("+");
+            int mode =  lookahead.sequence.equals("+") ? AdditionExpressionNode.ADD : AdditionExpressionNode.SUB;
             nextToken();
             ExpressionNode t = term();
-            sum.add(t, positive);
+            sum.add(t, mode);
 
             return sumOp(sum);
         }
@@ -163,14 +163,14 @@ public class Parser {
     private ExpressionNode signedTerm() {
         // signed_term -> PLUSMINUS term
         if(lookahead.token == Token.PLUSMINUS) {
-            boolean positive = lookahead.sequence.equals("+");
+            int mode = lookahead.sequence.equals("+") ? AdditionExpressionNode.ADD : AdditionExpressionNode.SUB;
             nextToken();
             ExpressionNode t = term();
-            if(positive) {
+            if(mode == AdditionExpressionNode.ADD) {
                 return t;
             }
             else {
-                return new AdditionExpressionNode(t, false);
+                return new AdditionExpressionNode(t, AdditionExpressionNode.SUB);
             }
         }
 
@@ -183,7 +183,7 @@ public class Parser {
      */
     private ExpressionNode term() {
         // term -> factor term_op
-        ExpressionNode f = factor();
+        ExpressionNode f = signedFactor();
         return termOp(f);
     }
 
@@ -192,7 +192,7 @@ public class Parser {
      */
     private ExpressionNode termOp(ExpressionNode expression) {
         // term_op -> MULTDIV factor term_op
-        if(lookahead.token == Token.MULTDIV) {
+        if(lookahead.token == Token.MULTDIVMOD) {
             MultiplicationExpressionNode prod;
 
       // This means we are actually dealing with a product
@@ -201,14 +201,24 @@ public class Parser {
                 prod = (MultiplicationExpressionNode)expression;
             }
             else {
-                prod = new MultiplicationExpressionNode(expression, true);
+                prod = new MultiplicationExpressionNode(expression, MultiplicationExpressionNode.MULT);
             }
 
             // reduce the input and recursively call sum_op
-            boolean positive = lookahead.sequence.equals("*");
+            int mode;
+            
+            if(lookahead.sequence.equals("*")) {
+                mode = MultiplicationExpressionNode.MULT;
+            }
+            else if(lookahead.sequence.equals("/")) {
+                mode = MultiplicationExpressionNode.DIV;
+            }
+            else {
+                mode = MultiplicationExpressionNode.MOD;
+            }
             nextToken();
             ExpressionNode f = signedFactor();
-            prod.add(f, positive);
+            prod.add(f, mode);
 
             return termOp(prod);
         }
@@ -223,14 +233,14 @@ public class Parser {
     private ExpressionNode signedFactor() {
         // signed_factor -> PLUSMINUS factor
         if(lookahead.token == Token.PLUSMINUS) {
-            boolean positive = lookahead.sequence.equals("+");
+            int mode = lookahead.sequence.equals("+") ? AdditionExpressionNode.ADD : AdditionExpressionNode.SUB;
             nextToken();
-            ExpressionNode t = factor();
-            if(positive) {
+            ExpressionNode t = signedFactor();
+            if(mode == AdditionExpressionNode.ADD) {
                 return t;
             }
             else {
-                return new AdditionExpressionNode(t, false);
+                return new AdditionExpressionNode(t, AdditionExpressionNode.SUB);
             }
         }
 
