@@ -192,7 +192,7 @@ public class Parser {
      */
     private ExpressionNode termOp(ExpressionNode expression) {
         // term_op -> MULTDIV factor term_op
-        if(lookahead.token == Token.MULTDIVMOD) {
+        if(lookahead.token == Token.MULTDIVREM) {
             MultiplicationExpressionNode prod;
 
       // This means we are actually dealing with a product
@@ -214,7 +214,7 @@ public class Parser {
                 mode = MultiplicationExpressionNode.DIV;
             }
             else {
-                mode = MultiplicationExpressionNode.MOD;
+                mode = MultiplicationExpressionNode.REM;
             }
             nextToken();
             ExpressionNode f = signedFactor();

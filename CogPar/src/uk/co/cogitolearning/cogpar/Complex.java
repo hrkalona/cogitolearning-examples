@@ -444,7 +444,7 @@ public final class Complex {
     /*
     * z = z1 % z2
     */
-    public final Complex modulo(Complex z) {
+    public final Complex remainder(Complex z) {
         
         return this.sub(z.times(this.divide(z).trunc()));
         
@@ -453,7 +453,7 @@ public final class Complex {
     /*
     * z1 = z1 % z2
     */
-    public final Complex modulo_mutable(Complex z) {
+    public final Complex remainder_mutable(Complex z) {
         
         return this.sub_mutable(z.times(this.divide(z).trunc_mutable()));
         
@@ -462,7 +462,7 @@ public final class Complex {
     /*
     * z = z1 % Real
     */
-    public final Complex modulo(double real) {
+    public final Complex remainder(double real) {
         
         return this.sub(this.divide(real).trunc().times(real));
         
@@ -471,7 +471,7 @@ public final class Complex {
     /*
     * z1 = z1 % Real
     */
-    public final Complex modulo_mutable(double real) {
+    public final Complex remainder_mutable(double real) {
         
         return this.sub_mutable(this.divide(real).trunc_mutable().times_mutable(real));
         
@@ -480,7 +480,7 @@ public final class Complex {
     /*
     * z = z1 % Imaginary
     */
-    public final Complex modulo_i(double imaginary) {
+    public final Complex remainder_i(double imaginary) {
         
         return this.sub(this.divide_i(imaginary).trunc().times_i(imaginary));
         
@@ -489,7 +489,7 @@ public final class Complex {
     /*
     * z1 = z1 % Imaginary
     */
-    public final Complex modulo_i_mutable(double imaginary) {
+    public final Complex remainder_i_mutable(double imaginary) {
         
         return this.sub_mutable(this.divide_i(imaginary).trunc_mutable().times_i_mutable(imaginary));
         
@@ -498,7 +498,7 @@ public final class Complex {
     /*
     * z = Real % z1
     */
-    public final Complex r_modulo(double real) {
+    public final Complex r_remainder(double real) {
         
         return (this.r_divide(real).trunc().times(this)).r_sub(real);
         
@@ -507,7 +507,7 @@ public final class Complex {
     /*
     * z1 = Real % z1
     */
-    public final Complex r_modulo_mutable(double real) {
+    public final Complex r_remainder_mutable(double real) {
         
         Complex a = (this.r_divide(real).trunc().times(this)).r_sub(real);
         
@@ -521,7 +521,7 @@ public final class Complex {
     /*
     * z = Imaginary % z1
     */
-    public final Complex i_modulo(double imaginary) {
+    public final Complex i_remainder(double imaginary) {
         
         return (this.i_divide(imaginary).trunc().times(this)).i_sub(imaginary);
         
@@ -530,7 +530,7 @@ public final class Complex {
     /*
     * z1 = Imaginary % z1
     */
-    public final Complex i_modulo_mutable(double imaginary) {
+    public final Complex i_remainder_mutable(double imaginary) {
         
         Complex a = (this.i_divide(imaginary).trunc().times(this)).i_sub(imaginary);
         

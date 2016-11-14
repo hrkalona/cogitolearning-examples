@@ -38,8 +38,8 @@ public class Token
   public static final int EPSILON = 0;
   /** Token id for plus or minus */
   public static final int PLUSMINUS = 1;
-  /** Token id for multiplication division or modulo */
-  public static final int MULTDIVMOD = 2;
+  /** Token id for multiplication division or remainder */
+  public static final int MULTDIVREM = 2;
   /** Token id for the exponentiation symbol */
   public static final int RAISED = 3;
   /** Token id for function names */

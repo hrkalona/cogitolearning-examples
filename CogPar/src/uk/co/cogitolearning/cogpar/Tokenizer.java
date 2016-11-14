@@ -103,7 +103,7 @@ public class Tokenizer
     Tokenizer tokenizer = new Tokenizer();
 
     tokenizer.add("[+-]", Token.PLUSMINUS);
-    tokenizer.add("[*/%]", Token.MULTDIVMOD);
+    tokenizer.add("[*/%]", Token.MULTDIVREM);
     tokenizer.add("\\^", Token.RAISED);
 
     String funcs = FunctionExpressionNode.getAllFunctions();

@@ -26,7 +26,7 @@ package uk.co.cogitolearning.cogpar;
 
 
 /**
- * An ExpressionNode that handles multiplications divisions and moduloes. The node can hold
+ * An ExpressionNode that handles multiplications divisions and remainders. The node can hold
  * an arbitrary number of factors that are either multiplied or divided to the product.
  * 
  */
@@ -34,7 +34,7 @@ public class MultiplicationExpressionNode extends SequenceExpressionNode
 {
     public static final int MULT = 0;
     public static final int DIV = 1;
-    public static final int MOD = 2;
+    public static final int REM = 2;
   /**
    * Default constructor.
    */
@@ -47,7 +47,7 @@ public class MultiplicationExpressionNode extends SequenceExpressionNode
    * @param node
    *          the term to be added
    * @param mode
-   *          a flag indicating whether the term is multiplied, divided or moduloed
+   *          a flag indicating whether the term is multiplied, divided or remaindered
    */
   public MultiplicationExpressionNode(ExpressionNode a, int mode)
   {
@@ -77,7 +77,7 @@ public class MultiplicationExpressionNode extends SequenceExpressionNode
       else if(t.mode == DIV)
         prod.divide_mutable(t.expression.getValue());
       else
-        prod.modulo_mutable(t.expression.getValue());
+        prod.remainder_mutable(t.expression.getValue());
     }
     return prod;
   }
