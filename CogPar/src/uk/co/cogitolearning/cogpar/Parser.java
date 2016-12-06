@@ -82,8 +82,6 @@ public class Parser {
      * expression tree made out of ExpressionNode objects
      */
     public ExpressionNode parse(String expression) {
-        expression = expression.replaceAll(" ", "");
-        expression = expression.replaceAll("\t", "");
         Tokenizer tokenizer = Tokenizer.getExpressionTokenizer();
         tokenizer.tokenize(expression);
         LinkedList<Token> tokens = tokenizer.getTokens();
@@ -315,7 +313,7 @@ public class Parser {
 
         // argument -> IMAGINARY_NUMBER
         if(lookahead.token == Token.IMAGINARY_NUMBER) {
-            StringTokenizer tok = new StringTokenizer(lookahead.sequence, "i");
+            StringTokenizer tok = new StringTokenizer(lookahead.sequence, "iI");
             ExpressionNode expr;
             if(tok.hasMoreTokens()) {
                 expr = new ImaginaryConstantExpressionNode(tok.nextToken());

@@ -111,7 +111,7 @@ public class Tokenizer
 
     tokenizer.add("\\(", Token.OPEN_BRACKET);
     tokenizer.add("\\)", Token.CLOSE_BRACKET);
-    tokenizer.add("((?:\\d+\\.?|\\.\\d)\\d*(?:[Ee][-+]?\\d+)?)?(i)", Token.IMAGINARY_NUMBER);
+    tokenizer.add("((?:\\d+\\.?|\\.\\d)\\d*(?:[Ee][-+]?\\d+)?)?( )*(i|I)", Token.IMAGINARY_NUMBER);
     tokenizer.add("(?:\\d+\\.?|\\.\\d)\\d*(?:[Ee][-+]?\\d+)?", Token.REAL_NUMBER);   
     tokenizer.add("[a-zA-Z]\\w*", Token.VARIABLE);
 
