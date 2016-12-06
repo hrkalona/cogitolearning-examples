@@ -82,6 +82,8 @@ public class Parser {
      * expression tree made out of ExpressionNode objects
      */
     public ExpressionNode parse(String expression) {
+        expression = expression.replaceAll(" ", "");
+        expression = expression.replaceAll("\t", "");
         Tokenizer tokenizer = Tokenizer.getExpressionTokenizer();
         tokenizer.tokenize(expression);
         LinkedList<Token> tokens = tokenizer.getTokens();
