@@ -82,5 +82,9 @@ public class SetVariable implements ExpressionNodeVisitor
   /** Do nothing */
   public void visit(FunctionExpressionNode node)
   {}
+  
+  /** Do nothing */
+  public void visit(Function2ArgumentsExpressionNode node)
+  {}
 
 }

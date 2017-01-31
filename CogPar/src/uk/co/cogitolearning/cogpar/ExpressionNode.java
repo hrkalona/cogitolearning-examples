@@ -46,6 +46,8 @@ public interface ExpressionNode
   public static final int FUNCTION_NODE = 6;
   /** Node id for imaginary constant nodes */
   public static final int IMAGINARY_CONSTANT_NODE = 7;
+  /** Node id for function nodes with 2 arguments */
+  public static final int FUNCTION_2_ARG_NODE = 8;
 
   /**
    * Returns the type of the node.ExpressionNode

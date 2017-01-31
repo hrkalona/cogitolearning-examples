@@ -54,6 +54,10 @@ public class Token
   public static final int VARIABLE = 8;
   /** Token id for imaginary numbers */
   public static final int IMAGINARY_NUMBER = 9;
+  /** Token id for function names with 2 arguments*/
+  public static final int FUNCTION_2ARGUMENTS = 10;
+  /** Token id for comma */
+  public static final int COMMA = 11;
 
   /** the token identifier */
   public final int token;

@@ -282,8 +282,16 @@ public class Parser {
             int function = FunctionExpressionNode.stringToFunction(lookahead.sequence);
 
             nextToken();
-            ExpressionNode expr = argument();
+            ExpressionNode expr = functionArgument();
             return new FunctionExpressionNode(function, expr);
+        }
+        // argument -> FUNCTION_2ARG argument
+        else if(lookahead.token == Token.FUNCTION_2ARGUMENTS) {
+            int function = Function2ArgumentsExpressionNode.stringToFunction(lookahead.sequence);
+
+            nextToken();
+            ExpressionNode expr[] = functionArgument2();
+            return new Function2ArgumentsExpressionNode(function, expr[0], expr[1]);
         }
         // argument -> OPEN_BRACKET sum CLOSE_BRACKET
         else if(lookahead.token == Token.OPEN_BRACKET) {
@@ -300,6 +308,43 @@ public class Parser {
         return value();
     }
 
+    /*handles the function with 2 arguments */
+    private ExpressionNode[] functionArgument2() {
+        if(lookahead.token == Token.OPEN_BRACKET) {
+            ExpressionNode[] exprs = new ExpressionNode[2];
+            
+            nextToken();
+            exprs[0] = expression();
+            if(lookahead.token != Token.COMMA) {
+                throw new ParserException("Comma expected.", lookahead);
+            }
+            nextToken();
+            exprs[1] = expression();
+            if(lookahead.token != Token.CLOSE_BRACKET) {
+                throw new ParserException("Closing brackets expected.", lookahead);
+            }
+            nextToken();
+            return exprs;
+        }
+
+        throw new ParserException("Opening brackets expected.", lookahead);
+    }
+    
+     /*handles the function with 1 argument */
+    private ExpressionNode functionArgument() {
+        if(lookahead.token == Token.OPEN_BRACKET) {          
+            nextToken();
+            ExpressionNode expr = expression();
+            if(lookahead.token != Token.CLOSE_BRACKET) {
+                throw new ParserException("Closing brackets expected.", lookahead);
+            }
+            nextToken();  
+            return expr;
+        }
+
+        throw new ParserException("Opening brackets expected.", lookahead);
+    }
+    
     /**
      * handles the non-terminal value
      */

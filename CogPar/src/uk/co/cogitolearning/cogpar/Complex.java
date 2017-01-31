@@ -1654,8 +1654,72 @@ public final class Complex {
         return sum;
   
     }
-  
+    
+    public final Complex fold_out(Complex z2) {
 
+        double norm_sqr = re * re + im * im;
+
+        return norm_sqr > z2.norm_squared() ? this.divide(norm_sqr) : this;
+
+    }
+
+    public final Complex fold_in(Complex z2) {
+
+        double norm_sqr = re * re + im * im;
+
+        return norm_sqr < z2.norm_squared() ? this.divide(norm_sqr) : this;
+
+    }
+
+    public final Complex fold_right(Complex z2) {
+
+        return re < z2.re ? new Complex(re + 2 * (z2.re - re), im) : this;
+
+    }
+
+    public final Complex fold_left(Complex z2) {
+
+        return re > z2.re ? new Complex(re - 2 * (re - z2.re), im) : this;
+
+    }
+
+    public final Complex fold_up(Complex z2) {
+
+        return im < z2.im ? new Complex(re, im + 2 * (z2.im - im)) : this;
+
+    }
+
+    public final Complex fold_down(Complex z2) {
+
+        return im > z2.im ? new Complex(re, im - 2 * (im - z2.im)) : this;
+
+    }
+    
+    public final Complex shear(Complex sh) {
+
+        return new Complex(re + (im * sh.re), im + (re * sh.im));
+
+    }
+    
+    public final Complex inflection(Complex inf) {
+        
+        if(re > inf.re) {
+            re = inf.re - (re - inf.re);
+            im = inf.im - (im - inf.im);
+        }
+        
+        double dx = re - inf.re;
+        double dy = im - inf.im;
+        double r = Math.sqrt(dx * dx + dy * dy);
+        double theta = -Math.atan2(dy, dx);
+        
+        double cos_theta = Math.cos(theta);
+        double sin_theta = Math.sin(theta);
+        
+        return new Complex(inf.re + ((re - inf.re) * cos_theta + (im - inf.im) * sin_theta) * r, 
+                inf.im + ((im - inf.im) * cos_theta - (re - inf.re) * sin_theta) * r);
+    }
+  
     public static final String toString2(double real, double imaginary) {
         String temp = "";
 
