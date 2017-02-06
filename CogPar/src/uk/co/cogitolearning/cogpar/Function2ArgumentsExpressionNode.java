@@ -66,6 +66,41 @@ public class Function2ArgumentsExpressionNode implements ExpressionNode {
      * function id for the compare function
      */
     public static final int COMPARE = 10;
+    
+    /**
+     * function id for the add function
+     */
+    public static final int ADD = 11;
+    
+    /**
+     * function id for the subtract function
+     */
+    public static final int SUB = 12;
+    
+    /**
+     * function id for the multiply function
+     */
+    public static final int MUL = 13;
+    
+    /**
+     * function id for the divide function
+     */
+    public static final int DIV = 14;
+    
+    /**
+     * function id for the reminder function
+     */
+    public static final int REM = 15;
+    
+    /**
+     * function id for the power function
+     */
+    public static final int POW = 16;
+    
+    /**
+     * function id for the log base n function
+     */
+    public static final int LOGN = 17;
 
     /**
      * the id of the function to apply to the argument
@@ -155,6 +190,34 @@ public class Function2ArgumentsExpressionNode implements ExpressionNode {
         if(str.equals("cmp")) {
             return Function2ArgumentsExpressionNode.COMPARE;
         }
+        
+        if(str.equals("add")) {
+            return Function2ArgumentsExpressionNode.ADD;
+        }
+        
+        if(str.equals("sub")) {
+            return Function2ArgumentsExpressionNode.SUB;
+        }
+        
+        if(str.equals("mul")) {
+            return Function2ArgumentsExpressionNode.MUL;
+        }
+        
+        if(str.equals("div")) {
+            return Function2ArgumentsExpressionNode.DIV;
+        }
+        
+        if(str.equals("rem")) {
+            return Function2ArgumentsExpressionNode.REM;
+        }
+        
+        if(str.equals("pow")) {
+            return Function2ArgumentsExpressionNode.POW;
+        }
+        
+        if(str.equals("logn")) {
+            return Function2ArgumentsExpressionNode.LOGN;
+        }
 
         throw new ParserException("Unexpected Function " + str + " found.");
     }
@@ -168,7 +231,7 @@ public class Function2ArgumentsExpressionNode implements ExpressionNode {
      * @return a string containing all the function names
      */
     public static String getAllFunctions() {
-        return "bipol|ibipol|inflect|foldu|foldd|foldl|foldr|foldi|foldo|shear|cmp";
+        return "bipol|ibipol|inflect|foldu|foldd|foldl|foldr|foldi|foldo|shear|cmp|add|sub|mul|div|rem|pow|logn";
     }
 
     /**
@@ -181,10 +244,10 @@ public class Function2ArgumentsExpressionNode implements ExpressionNode {
         switch (function) {
             
             case TO_BIPOLAR:
-                return argument.getValue().toBiPolar(argument2.getValue().getRe());
+                return argument.getValue().toBiPolar(argument2.getValue());
 
             case FROM_BIPOLAR:
-                return argument.getValue().fromBiPolar(argument2.getValue().getRe());
+                return argument.getValue().fromBiPolar(argument2.getValue());
                 
             case INFLECTION:
                 return argument.getValue().inflection(argument2.getValue());    
@@ -212,6 +275,27 @@ public class Function2ArgumentsExpressionNode implements ExpressionNode {
                 
             case COMPARE:
                 return new Complex(argument.getValue().compare(argument2.getValue()), 0);
+                
+            case ADD:
+                return argument.getValue().plus(argument2.getValue());
+                
+            case SUB:
+                return argument.getValue().sub(argument2.getValue());
+                
+            case MUL:
+                return argument.getValue().times(argument2.getValue());
+                
+            case DIV:
+                return argument.getValue().divide(argument2.getValue());
+                
+            case REM:
+                return argument.getValue().remainder(argument2.getValue());
+                
+            case POW:
+                return argument.getValue().pow(argument2.getValue());
+                
+            case LOGN:
+                return argument.getValue().log().divide(argument2.getValue().log());
         }
 
         throw new EvaluationException("Invalid function id " + function + "!");

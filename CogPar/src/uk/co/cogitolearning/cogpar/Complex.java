@@ -1612,20 +1612,16 @@ public final class Complex {
 
     }
 
-    public final Complex toBiPolar(double a) {
-        double d1_2, d2_2;
-
-        d1_2 = this.distance_squared(-a);
-        d2_2 = this.distance_squared(a);
-
-        return new Complex(0.5 * Math.log(d1_2 / d2_2), Math.acos((d1_2 + d2_2 - 4 * a * a) / (2 * Math.sqrt(d1_2 * d2_2))));
-
+    public final Complex toBiPolar(Complex a) {
+        
+        return this.times(0.5).cot().times(a).times_i(1);
+        
     }
 
-    public final Complex fromBiPolar(double a) {
-
-        return this.times_i(0.5).cot().times_i(a);
-
+    public final Complex fromBiPolar(Complex a) {
+        
+         return this.divide(a.times_i(1)).acot().times(2);
+         
     }
     
     /* Series approximation of the error function */
@@ -1703,21 +1699,10 @@ public final class Complex {
     
     public final Complex inflection(Complex inf) {
         
-        if(re > inf.re) {
-            re = inf.re - (re - inf.re);
-            im = inf.im - (im - inf.im);
-        }
+        Complex diff = this.sub(inf);
+         
+        return inf.plus(diff.times_mutable(diff));
         
-        double dx = re - inf.re;
-        double dy = im - inf.im;
-        double r = Math.sqrt(dx * dx + dy * dy);
-        double theta = -Math.atan2(dy, dx);
-        
-        double cos_theta = Math.cos(theta);
-        double sin_theta = Math.sin(theta);
-        
-        return new Complex(inf.re + ((re - inf.re) * cos_theta + (im - inf.im) * sin_theta) * r, 
-                inf.im + ((im - inf.im) * cos_theta - (re - inf.re) * sin_theta) * r);
     }
   
     public static final String toString2(double real, double imaginary) {
