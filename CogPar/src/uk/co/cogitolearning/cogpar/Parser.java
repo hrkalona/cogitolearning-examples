@@ -132,7 +132,7 @@ public class Parser {
      * handles the non-terminal sum_op
      */
     private ExpressionNode sumOp(ExpressionNode expr) {
-        // sum_op -> PLUSMINUS term sum_op
+        // sum_op -> PLUSMINUS signed_term sum_op
         if(lookahead.token == Token.PLUSMINUS) {
             AdditionExpressionNode sum;
       // This means we are actually dealing with a sum
@@ -147,7 +147,7 @@ public class Parser {
             // reduce the input and recursively call sum_op
             int mode =  lookahead.sequence.equals("+") ? AdditionExpressionNode.ADD : AdditionExpressionNode.SUB;
             nextToken();
-            ExpressionNode t = term();
+            ExpressionNode t = signedTerm();
             sum.add(t, mode);
 
             return sumOp(sum);
@@ -161,11 +161,11 @@ public class Parser {
      * handles the non-terminal signed_term
      */
     private ExpressionNode signedTerm() {
-        // signed_term -> PLUSMINUS term
+        // signed_term -> PLUSMINUS signed_term
         if(lookahead.token == Token.PLUSMINUS) {
             int mode = lookahead.sequence.equals("+") ? AdditionExpressionNode.ADD : AdditionExpressionNode.SUB;
             nextToken();
-            ExpressionNode t = term();
+            ExpressionNode t = signedTerm();
             if(mode == AdditionExpressionNode.ADD) {
                 return t;
             }
@@ -183,7 +183,7 @@ public class Parser {
      */
     private ExpressionNode term() {
         // term -> factor term_op
-        ExpressionNode f = signedFactor();
+        ExpressionNode f = factor();
         return termOp(f);
     }
 
@@ -191,7 +191,7 @@ public class Parser {
      * handles the non-terminal term_op
      */
     private ExpressionNode termOp(ExpressionNode expression) {
-        // term_op -> MULTDIV factor term_op
+        // term_op -> MULTDIV signed_factor term_op
         if(lookahead.token == Token.MULTDIVREM) {
             MultiplicationExpressionNode prod;
 
@@ -231,7 +231,7 @@ public class Parser {
      * handles the non-terminal signed_factor
      */
     private ExpressionNode signedFactor() {
-        // signed_factor -> PLUSMINUS factor
+        // signed_factor -> PLUSMINUS signed_factor
         if(lookahead.token == Token.PLUSMINUS) {
             int mode = lookahead.sequence.equals("+") ? AdditionExpressionNode.ADD : AdditionExpressionNode.SUB;
             nextToken();

@@ -312,6 +312,7 @@ public class Function2ArgumentsExpressionNode implements ExpressionNode {
     public void accept(ExpressionNodeVisitor visitor) {
         visitor.visit(this);
         argument.accept(visitor);
+        argument2.accept(visitor);
     }
 
 }

@@ -40,15 +40,15 @@ public class Test
     try
     {
       ExpressionNode expr = parser.parse("2i*(1+sin(pi/2))^2 -3.0i");
-      ExpressionNode expr2 = parser.parse("+12/+3++4^+4/-2*+3/-2+-24/+3*+8/-2*+cos(0)+-(+10/-2-+3*-5)"); // 218 like wolfram
+      ExpressionNode expr2 = parser.parse("--(+12/+3++4^+4/-2*+3/-2+-24/+3*+8/-2*+cos(0)+-(+10/-2-+3*-5))"); // 218 like wolfram
       ExpressionNode expr3 = parser.parse("12/3+4^4/(-2)*3/(-2)-24/3*8/(-2)*cos(0)-(10/(-2)-3*(-5))"); 
-      ExpressionNode expr4 = parser.parse("-------2++++++-+++++i"); 
+      ExpressionNode expr4 = parser.parse("--------2++++++-+++++i*----1"); 
       ExpressionNode expr5 = parser.parse("(0.4+1.3i) % (0.6-3.33i)"); 
       ExpressionNode expr6 = parser.parse("3%-4");
       ExpressionNode expr7 = parser.parse("inflect(2i*(1+sin(pi/2))^2 -3.0i, +12/+3++4^+4/-2*+3/-2+-24/+3*+8/-2*+cos(0)+-(+10/-2-+3*-5))");
       ExpressionNode expr8 = parser.parse("inflect(5i, 218)");
 
-      //expr.accept(new SetVariable("pi", new Complex(Math.PI, 0)));
+      expr.accept(new SetVariable("pi", new Complex(Math.PI, 0)));
       System.out.println("The value of the expression is "+expr.getValue());
       System.out.println("The value of the expression is "+expr2.getValue());
       System.out.println("The value of the expression is "+expr3.getValue());
