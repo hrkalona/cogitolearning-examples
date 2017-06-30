@@ -101,6 +101,11 @@ public class Function2ArgumentsExpressionNode implements ExpressionNode {
      * function id for the log base n function
      */
     public static final int LOGN = 17;
+    
+    /**
+     * function id for the fuzz function
+     */
+    public static final int FUZZ = 18;
 
     /**
      * the id of the function to apply to the argument
@@ -218,6 +223,10 @@ public class Function2ArgumentsExpressionNode implements ExpressionNode {
         if(str.equals("logn")) {
             return Function2ArgumentsExpressionNode.LOGN;
         }
+        
+        if(str.equals("fuzz")) {
+            return Function2ArgumentsExpressionNode.FUZZ;
+        }
 
         throw new ParserException("Unexpected Function " + str + " found.");
     }
@@ -231,7 +240,7 @@ public class Function2ArgumentsExpressionNode implements ExpressionNode {
      * @return a string containing all the function names
      */
     public static String getAllFunctions() {
-        return "bipol|ibipol|inflect|foldu|foldd|foldl|foldr|foldi|foldo|shear|cmp|add|sub|mul|div|rem|pow|logn";
+        return "bipol|ibipol|inflect|foldu|foldd|foldl|foldr|foldi|foldo|shear|cmp|add|sub|mul|div|rem|pow|logn|fuzz";
     }
 
     /**
@@ -296,6 +305,9 @@ public class Function2ArgumentsExpressionNode implements ExpressionNode {
                 
             case LOGN:
                 return argument.getValue().log().divide(argument2.getValue().log());
+                
+            case FUZZ:
+                return argument.getValue().fuzz(argument2.getValue());
         }
 
         throw new EvaluationException("Invalid function id " + function + "!");

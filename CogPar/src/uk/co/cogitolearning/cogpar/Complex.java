@@ -1704,6 +1704,62 @@ public final class Complex {
         return inf.plus(diff.times_mutable(diff));
         
     }
+    
+    public final Complex fuzz(Complex distance) {
+        double random;
+
+        Complex out = new Complex(re, im);     
+        //Real modifier
+        random = Math.random();
+        if(random < 0.5) {
+            random = Math.random() * distance.re;
+            out.re -= random;
+        } 
+        else {
+            random = Math.random() * distance.re;
+            out.re += random;
+        }
+
+        //Imaginary modifier
+        random = Math.random();
+        if(random < 0.5) {
+            random = Math.random() * distance.im;
+            out.im -= random;
+        } 
+        else {
+            random = Math.random() * distance.im;
+            out.im += random;
+        }
+
+        return out;
+    }
+    
+    public final Complex fuzz_mutable(Complex distance) {
+        double random;
+        //Real modifier
+        random = Math.random();
+        if(random < 0.5) {
+            random = Math.random() * distance.re;
+            re -= random;
+        } 
+        else {
+            random = Math.random() * distance.re;
+            re += random;
+        }
+        
+        //Imaginary modifier
+        random = Math.random();
+        if(random < 0.5) {
+            random = Math.random() * distance.im;
+            im -= random;
+        } 
+        else {
+            random = Math.random() * distance.im;
+            im += random;
+        }
+
+        return this;
+    }
   
     public static final String toString2(double real, double imaginary) {
         String temp = "";
