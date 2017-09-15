@@ -21,7 +21,7 @@ public final class Complex {
     private static final double pi_2;
     private double re;
     private double im;
-    
+
     static {
         pi_2 = Math.PI / 2;
     }
@@ -361,7 +361,7 @@ public final class Complex {
         return this;
 
     }
-    
+
     /*
      *  z1 / Imaginary
      */
@@ -373,7 +373,7 @@ public final class Complex {
         return new Complex((re + im * temp2) / temp3, (im - re * temp2) / temp3);
 
     }
-    
+
     /*
      *  z1 = z1 / Imaginary
      */
@@ -440,106 +440,106 @@ public final class Complex {
         return this;
 
     }
-    
+
     /*
-    * z = z1 % z2
-    */
+     * z = z1 % z2
+     */
     public final Complex remainder(Complex z) {
-        
+
         return this.sub(z.times(this.divide(z).trunc()));
-        
+
     }
-    
+
     /*
-    * z1 = z1 % z2
-    */
+     * z1 = z1 % z2
+     */
     public final Complex remainder_mutable(Complex z) {
-        
+
         return this.sub_mutable(z.times(this.divide(z).trunc_mutable()));
-        
+
     }
-    
+
     /*
-    * z = z1 % Real
-    */
+     * z = z1 % Real
+     */
     public final Complex remainder(double real) {
-        
+
         return this.sub(this.divide(real).trunc().times(real));
-        
+
     }
-    
+
     /*
-    * z1 = z1 % Real
-    */
+     * z1 = z1 % Real
+     */
     public final Complex remainder_mutable(double real) {
-        
+
         return this.sub_mutable(this.divide(real).trunc_mutable().times_mutable(real));
-        
+
     }
-    
+
     /*
-    * z = z1 % Imaginary
-    */
+     * z = z1 % Imaginary
+     */
     public final Complex remainder_i(double imaginary) {
-        
+
         return this.sub(this.divide_i(imaginary).trunc().times_i(imaginary));
-        
+
     }
-    
+
     /*
-    * z1 = z1 % Imaginary
-    */
+     * z1 = z1 % Imaginary
+     */
     public final Complex remainder_i_mutable(double imaginary) {
-        
+
         return this.sub_mutable(this.divide_i(imaginary).trunc_mutable().times_i_mutable(imaginary));
-        
+
     }
-    
+
     /*
-    * z = Real % z1
-    */
+     * z = Real % z1
+     */
     public final Complex r_remainder(double real) {
-        
+
         return (this.r_divide(real).trunc().times(this)).r_sub(real);
-        
+
     }
-    
+
     /*
-    * z1 = Real % z1
-    */
+     * z1 = Real % z1
+     */
     public final Complex r_remainder_mutable(double real) {
-        
+
         Complex a = (this.r_divide(real).trunc().times(this)).r_sub(real);
-        
+
         re = a.re;
         im = a.im;
-        
+
         return this;
-        
+
     }
-    
+
     /*
-    * z = Imaginary % z1
-    */
+     * z = Imaginary % z1
+     */
     public final Complex i_remainder(double imaginary) {
-        
+
         return (this.i_divide(imaginary).trunc().times(this)).i_sub(imaginary);
-        
+
     }
-    
+
     /*
-    * z1 = Imaginary % z1
-    */
+     * z1 = Imaginary % z1
+     */
     public final Complex i_remainder_mutable(double imaginary) {
-        
+
         Complex a = (this.i_divide(imaginary).trunc().times(this)).i_sub(imaginary);
-        
+
         re = a.re;
         im = a.im;
-        
+
         return this;
-        
-    }     
+
+    }
 
     /*
      *  1 / z
@@ -1478,14 +1478,14 @@ public final class Complex {
             return pi.divide((this.times(pi)).sin().times((this.r_sub(1.0)).gamma_la()));
         }
 
-        this.sub_mutable(1.0);
+        Complex temp = this.sub(1.0);
         Complex a = new Complex(p[0], 0);
-        Complex t = this.plus(g + 0.5);
+        Complex t = temp.plus(g + 0.5);
         for(int i = 1; i < p.length; i++) {
-            a.plus_mutable(new Complex(p[i], 0).divide(this.plus(i)));
+            a.plus_mutable(new Complex(p[i], 0).divide(temp.plus(i)));
         }
 
-        return new Complex(Math.sqrt(2 * Math.PI), 0).times(t.pow(this.plus(0.5))).times((t.negative()).exp()).times(a);
+        return new Complex(Math.sqrt(2 * Math.PI), 0).times(t.pow(temp.plus(0.5))).times((t.negative()).exp()).times(a);
     }
 
     /*
@@ -1613,44 +1613,62 @@ public final class Complex {
     }
 
     public final Complex toBiPolar(Complex a) {
-        
+
         return this.times(0.5).cot().times(a).times_i(1);
-        
+
     }
 
     public final Complex fromBiPolar(Complex a) {
-        
-         return this.divide(a.times_i(1)).acot().times(2);
-         
+
+        return this.divide(a.times_i(1)).acot().times(2);
+
     }
-    
+
     /* Series approximation of the error function */
     public final Complex erf() {
-        
+
         Complex sum = new Complex();
-        
+
         for(int k = 0; k < 50; k++) {
             double temp = 2 * k + 1;
             sum.plus_mutable((this.pow(temp).times(Math.pow(-1, k))).divide(new Complex(k, 0).factorial().times(temp)));
         }
-        
+
         return sum.times(2.0 / Math.sqrt(Math.PI));
-  
+
     }
-    
+
     /* Series approximation of the riemann zeta function */
     public final Complex riemann_zeta() {
-        
+
         Complex sum = new Complex();
-        
-        for(int k = 1; k < 51; k++) {
-            sum.plus_mutable(new Complex(k, 0).pow(this.negative()));
+
+        if(re > 0) {
+            Complex temp = this.r_sub(1);
+            Complex temp2 = this.negative();
+            Complex sum2 = new Complex();
+            
+            for(int k = 1; k < 101; k++) {
+               sum2.plus_mutable((new Complex(-1, 0).pow(k - 1)).times(new Complex(k, 0).pow(temp2)));
+            }
+            
+            sum = ((new Complex(1, 0).sub(new Complex(2, 0).pow(temp))).pow(-1)).times(sum2);
         }
-        
-        return sum;
-  
-    }
+        else {
+             Complex temp = this.r_sub(1);
+            
+             Complex gamma = temp.gamma_la();
+
+             Complex sum2 = temp.riemann_zeta();
+                       
+             sum = (new Complex(2, 0).pow(this)).times(new Complex(Math.PI, 0).pow(this.sub(1))).times(gamma).times(this.times(pi_2).sin()).times(sum2);
+        }
     
+
+        return sum;
+
+    }
+
     public final Complex fold_out(Complex z2) {
 
         double norm_sqr = re * re + im * im;
@@ -1690,31 +1708,31 @@ public final class Complex {
         return im > z2.im ? new Complex(re, im - 2 * (im - z2.im)) : this;
 
     }
-    
+
     public final Complex shear(Complex sh) {
 
         return new Complex(re + (im * sh.re), im + (re * sh.im));
 
     }
-    
+
     public final Complex inflection(Complex inf) {
-        
+
         Complex diff = this.sub(inf);
-         
+
         return inf.plus(diff.times_mutable(diff));
-        
+
     }
-    
+
     public final Complex fuzz(Complex distance) {
         double random;
 
-        Complex out = new Complex(re, im);     
+        Complex out = new Complex(re, im);
         //Real modifier
         random = Math.random();
         if(random < 0.5) {
             random = Math.random() * distance.re;
             out.re -= random;
-        } 
+        }
         else {
             random = Math.random() * distance.re;
             out.re += random;
@@ -1725,7 +1743,7 @@ public final class Complex {
         if(random < 0.5) {
             random = Math.random() * distance.im;
             out.im -= random;
-        } 
+        }
         else {
             random = Math.random() * distance.im;
             out.im += random;
@@ -1733,7 +1751,7 @@ public final class Complex {
 
         return out;
     }
-    
+
     public final Complex fuzz_mutable(Complex distance) {
         double random;
         //Real modifier
@@ -1741,18 +1759,18 @@ public final class Complex {
         if(random < 0.5) {
             random = Math.random() * distance.re;
             re -= random;
-        } 
+        }
         else {
             random = Math.random() * distance.re;
             re += random;
         }
-        
+
         //Imaginary modifier
         random = Math.random();
         if(random < 0.5) {
             random = Math.random() * distance.im;
             im -= random;
-        } 
+        }
         else {
             random = Math.random() * distance.im;
             im += random;
@@ -1760,7 +1778,7 @@ public final class Complex {
 
         return this;
     }
-  
+
     public static final String toString2(double real, double imaginary) {
         String temp = "";
 
