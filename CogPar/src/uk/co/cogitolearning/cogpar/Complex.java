@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package uk.co.cogitolearning.cogpar;
 
 public final class Complex {
@@ -56,6 +57,18 @@ public final class Complex {
     public final double getIm() {
 
         return im;
+
+    }
+
+    public final void setRe(double re) {
+
+        this.re = re;
+
+    }
+
+    public final void setIm(double im) {
+
+        this.im = im;
 
     }
 
@@ -541,6 +554,7 @@ public final class Complex {
 
     }
 
+
     /*
      *  1 / z
      */
@@ -842,12 +856,30 @@ public final class Complex {
     }
 
     /*
-     *  |z|
+     *  |z|, euclidean norm
      */
     public final double norm() {
 
         return Math.sqrt(re * re + im * im);
 
+    }
+    
+   /*
+    * n-norm
+    */
+    public final Complex nnorm(Complex n) {
+
+        double tempRe = this.getAbsRe();
+        double tempIm = this.getAbsIm();
+        
+        tempRe = tempRe == 0 ? 1e-14 : tempRe;
+        tempIm = tempIm == 0 ? 1e-14 : tempIm;
+        
+        Complex a = new Complex(tempRe, 0);
+        Complex b = new Complex(tempIm, 0);
+        
+        return (a.pow(n).plus(b.pow(n))).pow(n.reciprocal());
+        
     }
 
     /*
@@ -1098,7 +1130,7 @@ public final class Complex {
         double temp3 = Math.exp(im);
         Complex temp4 = new Complex(temp3 * cos_re, temp3 * -sin_re);
 
-        return (temp2.plus(temp4)).divide(2);
+        return (temp2.plus(temp4)).times(0.5);
 
     }
 
@@ -1117,7 +1149,7 @@ public final class Complex {
         double temp3 = Math.exp(-re);
         Complex temp4 = new Complex(temp3 * cos_im, temp3 * -sin_im);
 
-        return (temp2.plus(temp4)).divide(2);
+        return (temp2.plus(temp4)).times(0.5);
 
     }
 
@@ -1154,7 +1186,7 @@ public final class Complex {
         double temp3 = Math.exp(im);
         Complex temp4 = new Complex(temp3 * cos_re, temp3 * -sin_re);
 
-        return (temp2.sub(temp4)).divide(new Complex(0, 2));
+        return (temp2.sub(temp4)).times_i(-0.5);
 
     }
 
@@ -1173,7 +1205,7 @@ public final class Complex {
         double temp3 = Math.exp(-re);
         Complex temp4 = new Complex(temp3 * cos_im, temp3 * -sin_im);
 
-        return (temp2.sub(temp4)).divide(2);
+        return (temp2.sub(temp4)).times(0.5);
 
     }
 
@@ -1381,6 +1413,187 @@ public final class Complex {
         return (((this.square().reciprocal()).plus(1).sqrt()).plus(this.reciprocal())).log();
 
     }
+    
+    /*
+     * versine(z) = 1 - cos(z)
+     */
+    public final Complex vsin() {
+        
+        return this.cos().r_sub(1);
+                
+    }
+    
+    /*
+     * arc versine(z) = acos(1 - z)
+     */
+    public final Complex avsin() {
+        
+        return this.r_sub(1).acos();
+                
+    }
+    
+    /*
+     * vercosine(z) = 1 + cos(z)
+     */
+    public final Complex vcos() {
+        
+        return this.cos().plus(1);
+                
+    }
+    
+    /*
+     * arc vercosine(z) = acos(1 + z)
+     */
+    public final Complex avcos() {
+        
+        return this.plus(1).acos();
+                
+    }
+    
+    /*
+     * coversine(z) = 1 - sin(z)
+     */
+    public final Complex cvsin() {
+        
+        return this.sin().r_sub(1);
+                
+    }
+    
+    /*
+     * arc coversine(z) = asin(1 - z)
+     */
+    public final Complex acvsin() {
+        
+        return this.r_sub(1).asin();
+                
+    }
+    
+    /*
+     * covercosine(z) = 1 + sin(z)
+     */
+    public final Complex cvcos() {
+        
+        return this.sin().plus(1);
+                
+    }
+    
+    /*
+     * arc covercosine(z) = asin(1 + z)
+     */
+    public final Complex acvcos() {
+        
+        return this.plus(1).asin();
+                
+    }
+    
+    /*
+     * haversine(z) = versine(z) / 2
+     */
+    public final Complex hvsin() {
+        
+        return this.vsin().times(0.5);
+                
+    }
+    
+    /*
+     * arc haversine(z) = 2 * asin(sqrt(z))
+     */
+    public final Complex ahvsin() {
+        
+        return this.sqrt().asin().times(2);
+                
+    }
+    
+    /*
+     * havercosine(z) = vercosine(z) / 2
+     */
+    public final Complex hvcos() {
+        
+        return this.vcos().times(0.5);
+                
+    }
+    
+    /*
+     * arc havercosine(z) = 2 * acos(sqrt(z))
+     */
+    public final Complex ahvcos() {
+        
+        return this.sqrt().acos().times(2);
+                
+    }
+    
+    /*
+     * hacoversine(z) = coversine(z) / 2
+     */
+    public final Complex hcvsin() {
+        
+        return this.cvsin().times(0.5);
+                
+    }
+    
+    /*
+     * arc hacoversine(z) = asin(1 - 2*z)
+     */
+    public final Complex ahcvsin() {
+        
+        return this.times(2).r_sub(1).asin();
+               
+    }
+    
+    /*
+     * hacovercosine(z) = covercosine(z) / 2
+     */
+    public final Complex hcvcos() {
+        
+        return this.cvcos().times(0.5);
+                
+    }
+    
+    /*
+     * arc hacovercosine(z) = asin(-1 - 2*z)
+     */
+    public final Complex ahcvcos() {
+        
+        return this.times(-2).r_sub(1).asin();
+                
+    }
+    
+    /*
+     * exsecant(z) = sec(z) - 1
+     */
+    public final Complex exsec() {
+        
+        return this.sec().sub(1);
+        
+    }
+    
+    /*
+     * arc exsecant(z) = asec(z + 1)
+     */
+    public final Complex aexsec() {
+        
+        return this.plus(1).asec();
+        
+    }
+    
+    /*
+     * excosecant(z) = csc(z) - 1
+     */
+    public final Complex excsc() {
+        
+        return this.csc().sub(1);
+        
+    }
+    
+    /*
+     * arc excosecant(z) = acsc(z + 1)
+     */
+    public final Complex aexcsc() {
+        
+        return this.plus(1).acsc();
+        
+    }
+
 
     /*
      *  exp(z) = exp(Re(z)) * (cos(Im(z)) + sin(Im(z))i)
@@ -1421,6 +1634,104 @@ public final class Complex {
     }
 
     /*
+     *  sin, (sin)'
+     */
+    public final Complex[] der01_sin() {
+
+        double temp = Math.exp(-im);
+
+        double cos_re = Math.cos(re);
+        double sin_re = Math.sin(re);
+
+        Complex temp2 = new Complex(temp * cos_re, temp * sin_re);
+
+        double temp3 = Math.exp(im);
+        Complex temp4 = new Complex(temp3 * cos_re, temp3 * -sin_re);
+
+        Complex[] sin_and_der = new Complex[2];
+
+        sin_and_der[0] = (temp2.sub(temp4)).times_i(-0.5);
+        sin_and_der[1] = (temp2.plus(temp4)).times(0.5);
+
+        return sin_and_der;
+
+    }
+
+    /*
+     *  sin, (sin)', (sin)''
+     */
+    public final Complex[] der012_sin() {
+
+        double temp = Math.exp(-im);
+
+        double cos_re = Math.cos(re);
+        double sin_re = Math.sin(re);
+
+        Complex temp2 = new Complex(temp * cos_re, temp * sin_re);
+
+        double temp3 = Math.exp(im);
+        Complex temp4 = new Complex(temp3 * cos_re, temp3 * -sin_re);
+
+        Complex[] sin_and_der = new Complex[3];
+
+        sin_and_der[0] = (temp2.sub(temp4)).times_i(-0.5);
+        sin_and_der[1] = (temp2.plus(temp4)).times(0.5);
+        sin_and_der[2] = sin_and_der[0].negative();
+
+        return sin_and_der;
+
+    }
+
+    /*
+     *  cos, (cos)', (cos)''
+     */
+    public final Complex[] der01_cos() {
+
+        double temp = Math.exp(-im);
+
+        double cos_re = Math.cos(re);
+        double sin_re = Math.sin(re);
+
+        Complex temp2 = new Complex(temp * cos_re, temp * sin_re);
+
+        double temp3 = Math.exp(im);
+        Complex temp4 = new Complex(temp3 * cos_re, temp3 * -sin_re);
+
+        Complex[] sin_and_der = new Complex[2];
+
+        sin_and_der[0] = (temp2.plus(temp4)).times(0.5);
+        sin_and_der[1] = (temp4.sub(temp2)).times_i(-0.5);
+
+        return sin_and_der;
+
+    }
+
+    /*
+     *  cos, (cos)', (cos)''
+     */
+    public final Complex[] der012_cos() {
+
+        double temp = Math.exp(-im);
+
+        double cos_re = Math.cos(re);
+        double sin_re = Math.sin(re);
+
+        Complex temp2 = new Complex(temp * cos_re, temp * sin_re);
+
+        double temp3 = Math.exp(im);
+        Complex temp4 = new Complex(temp3 * cos_re, temp3 * -sin_re);
+
+        Complex[] sin_and_der = new Complex[3];
+
+        sin_and_der[0] = (temp2.plus(temp4)).times(0.5);
+        sin_and_der[1] = (temp4.sub(temp2)).times_i(-0.5);
+        sin_and_der[2] = sin_and_der[0].negative();
+
+        return sin_and_der;
+
+    }
+
+    /*
      *  The closest Gaussian Integer to the Complex number
      */
     public final Complex gaussian_integer() {
@@ -1443,6 +1754,9 @@ public final class Complex {
 
     /*
      *  lexicographical comparison between two complex numbers
+     * -1 when z1 > z2
+     *  1 when z1 < z2
+     *  0 when z1 == z2
      */
     public final int compare(Complex z2) {
 
@@ -1663,9 +1977,51 @@ public final class Complex {
                        
              sum = (new Complex(2, 0).pow(this)).times(new Complex(Math.PI, 0).pow(this.sub(1))).times(gamma).times(this.times(pi_2).sin()).times(sum2);
         }
-    
-
+   
         return sum;
+
+    }
+
+    public final Complex inflection(Complex inf) {
+
+        Complex diff = this.sub(inf);
+
+        return inf.plus(diff.times_mutable(diff));
+
+    }
+
+    public static final String toString2(double real, double imaginary) {
+        String temp = "";
+
+        real = real == 0.0 ? 0.0 : real;
+        imaginary = imaginary == 0.0 ? 0.0 : imaginary;
+
+        if(imaginary >= 0) {
+            temp = real + "+" + imaginary + "i";
+        }
+        else {
+            temp = real + "" + imaginary + "i";
+        }
+
+        return temp;
+    }
+
+    @Override
+    public final String toString() {
+
+        String temp = "";
+
+        if(im > 0) {
+            temp = re + "+" + im + "i";
+        }
+        else if(im == 0) {
+            temp = re + "+" + (0.0) + "i";
+        }
+        else {
+            temp = re + "" + im + "i";
+        }
+
+        return temp;
 
     }
 
@@ -1709,17 +2065,86 @@ public final class Complex {
 
     }
 
+    public final Complex pinch(Complex center, double radius, double amount, double theta) {
+
+        double radius2 = radius * radius;
+        double angle = Math.toRadians(theta);
+        double dx = re - center.re;
+        double dy = im - center.im;
+        double distance = dx * dx + dy * dy;
+
+        if(distance > radius2 || distance == 0) {
+            return this;
+        }
+        else {
+            double d = Math.sqrt(distance / radius2);
+            double t = Math.pow(Math.sin(Math.PI * 0.5 * d), -amount);
+
+            dx *= t;
+            dy *= t;
+
+            double e = 1 - d;
+            double a = angle * e * e;
+
+            double s = Math.sin(a);
+            double c = Math.cos(a);
+
+            return new Complex(center.re + c * dx - s * dy, center.im + s * dx + c * dy);
+        }
+    }
+
     public final Complex shear(Complex sh) {
 
         return new Complex(re + (im * sh.re), im + (re * sh.im));
 
     }
 
-    public final Complex inflection(Complex inf) {
+    public final Complex kaleidoscope(Complex center, double phi, double phi2, double radius, int sides) {
 
-        Complex diff = this.sub(inf);
+        double angle = Math.toRadians(phi);
+        double angle2 = Math.toRadians(phi2);
+        double dx = re - center.re;
+        double dy = im - center.im;
+        double r = Math.sqrt(dx * dx + dy * dy);
+        double theta = Math.atan2(dy, dx) - angle - angle2;
+        theta = triangle((theta / Math.PI * sides * .5));
+        if(radius != 0) {
+            double c = Math.cos(theta);
+            double radiusc = radius / c;
+            r = radiusc * triangle(r / radiusc);
+        }
+        theta += angle;
 
-        return inf.plus(diff.times_mutable(diff));
+        return new Complex(center.re + r * Math.cos(theta), center.im + r * Math.sin(theta));
+
+    }
+
+    public final Complex twirl(Complex center, double theta, double radius) {
+
+        double radius2 = radius * radius;
+        double angle = Math.toRadians(theta);
+
+        double dx = re - center.re;
+        double dy = im - center.im;
+        double distance = dx * dx + dy * dy;
+        if(distance > radius2) {
+            return this;
+        }
+        else {
+            distance = Math.sqrt(distance);
+            double a = Math.atan2(dy, dx) + (angle * (radius - distance)) / radius;
+            return new Complex(center.re + distance * Math.cos(a), center.im + distance * Math.sin(a));
+        }
+    }
+
+    public final Complex circle_inversion(Complex center, double radius) {
+
+        double distance = this.distance_squared(center);
+        double radius2 = radius * radius;
+
+        double temp = radius2 / distance;
+
+        return new Complex(center.re + (re - center.re) * temp, center.im + (im - center.im) * temp);
 
     }
 
@@ -1779,38 +2204,18 @@ public final class Complex {
         return this;
     }
 
-    public static final String toString2(double real, double imaginary) {
-        String temp = "";
-
-        real = real == 0.0 ? 0.0 : real;
-        imaginary = imaginary == 0.0 ? 0.0 : imaginary;
-
-        if(imaginary >= 0) {
-            temp = real + "+" + imaginary + "i";
-        }
-        else {
-            temp = real + "" + imaginary + "i";
-        }
-
-        return temp;
+    private double triangle(double x) {
+        double r = mod(x, 1.0f);
+        return 2.0f * (r < 0.5 ? r : 1 - r);
     }
 
-    @Override
-    public final String toString() {
+    private double mod(double a, double b) {
+        int n = (int)(a / b);
 
-        String temp = "";
-
-        if(im > 0) {
-            temp = re + "+" + im + "i";
+        a -= n * b;
+        if(a < 0) {
+            return a + b;
         }
-        else if(im == 0) {
-            temp = re + "+" + (0.0) + "i";
-        }
-        else {
-            temp = re + "" + im + "i";
-        }
-
-        return temp;
-
+        return a;
     }
 }

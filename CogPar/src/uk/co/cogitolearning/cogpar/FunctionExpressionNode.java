@@ -249,6 +249,106 @@ public class FunctionExpressionNode implements ExpressionNode {
      * function id for the riemann zeta function
      */
     public static final int R_ZETA = 48;
+    
+    /**
+     * function id for the versine function
+     */
+    public static final int VSIN = 49;
+    
+    /**
+     * function id for the arc versine function
+     */
+    public static final int AVSIN = 50;
+    
+    /**
+     * function id for the vercosine function
+     */
+    public static final int VCOS = 51;
+    
+    /**
+     * function id for the arc vercosine function
+     */
+    public static final int AVCOS = 52;
+    
+    /**
+     * function id for the coversine function
+     */
+    public static final int CVSIN = 53;
+    
+    /**
+     * function id for the arc coversine function
+     */
+    public static final int ACVSIN = 54;
+    
+    /**
+     * function id for the covercosine function
+     */
+    public static final int CVCOS = 55;
+    
+    /**
+     * function id for the arc covercosine function
+     */
+    public static final int ACVCOS = 56;
+    
+    /**
+     * function id for the haversine function
+     */
+    public static final int HVSIN = 57;
+    
+    /**
+     * function id for the arc haversine function
+     */
+    public static final int AHVSIN = 58;
+    
+    /**
+     * function id for the havercosine function
+     */
+    public static final int HVCOS = 59;
+    
+    /**
+     * function id for the arc havercosine function
+     */
+    public static final int AHVCOS = 60;
+    
+    /**
+     * function id for the hacoversine function
+     */
+    public static final int HCVSIN = 61;
+    
+    /**
+     * function id for the arc hacoversine function
+     */
+    public static final int AHCVSIN = 62;
+    
+    /**
+     * function id for the hacovercosine function
+     */
+    public static final int HCVCOS = 63;
+    
+    /**
+     * function id for the arc hacovercosine function
+     */
+    public static final int AHCVCOS = 64;
+    
+    /**
+     * function id for the exsecant function
+     */
+    public static final int EXSEC = 65;
+    
+    /**
+     * function id for the arc exsecant function
+     */
+    public static final int AEXSEC = 66;
+    
+    /**
+     * function id for the excosecant function
+     */
+    public static final int EXCSC = 67;
+    
+    /**
+     * function id for the arc excosecant function
+     */
+    public static final int AEXCSC = 68;
 
     /**
      * the id of the function to apply to the argument
@@ -455,6 +555,86 @@ public class FunctionExpressionNode implements ExpressionNode {
         if(str.equals("rzeta")) {
             return FunctionExpressionNode.R_ZETA;
         }
+        
+        if (str.equals("vsin")) {
+            return FunctionExpressionNode.VSIN;
+        }
+        
+        if (str.equals("avsin")) {
+            return FunctionExpressionNode.AVSIN;
+        }
+        
+        if (str.equals("vcos")) {
+            return FunctionExpressionNode.VCOS;
+        }
+        
+        if (str.equals("avcos")) {
+            return FunctionExpressionNode.AVCOS;
+        }
+        
+        if (str.equals("cvsin")) {
+            return FunctionExpressionNode.CVSIN;
+        }
+        
+        if (str.equals("acvsin")) {
+            return FunctionExpressionNode.ACVSIN;
+        }
+        
+        if (str.equals("cvcos")) {
+            return FunctionExpressionNode.CVCOS;
+        }
+        
+        if (str.equals("acvcos")) {
+            return FunctionExpressionNode.ACVCOS;
+        }
+        
+        if (str.equals("hvsin")) {
+            return FunctionExpressionNode.HVSIN;
+        }
+        
+        if (str.equals("ahvsin")) {
+            return FunctionExpressionNode.AHVSIN;
+        }
+        
+        if (str.equals("hvcos")) {
+            return FunctionExpressionNode.HVCOS;
+        }
+        
+        if (str.equals("ahvcos")) {
+            return FunctionExpressionNode.AHVCOS;
+        }
+        
+        if (str.equals("hcvsin")) {
+            return FunctionExpressionNode.HCVSIN;
+        }
+        
+        if (str.equals("ahcvsin")) {
+            return FunctionExpressionNode.AHCVSIN;
+        }
+        
+        if (str.equals("hcvcos")) {
+            return FunctionExpressionNode.HCVCOS;
+        }
+        
+        if (str.equals("ahcvcos")) {
+            return FunctionExpressionNode.AHCVCOS;
+        }
+        
+        if (str.equals("exsec")) {
+            return FunctionExpressionNode.EXSEC;
+        }
+        
+        if (str.equals("aexsec")) {
+            return FunctionExpressionNode.AEXSEC;
+        }
+        
+        if (str.equals("excsc")) {
+            return FunctionExpressionNode.EXCSC;
+        }
+        
+        if (str.equals("aexcsc")) {
+            return FunctionExpressionNode.AEXCSC;
+        }
 
         throw new ParserException("Unexpected Function " + str + " found.");
     }
@@ -468,7 +648,8 @@ public class FunctionExpressionNode implements ExpressionNode {
      * @return a string containing all the function names
      */
     public static String getAllFunctions() {
-        return "sin|sinh|asin|asinh|cos|cosh|acos|acosh|tan|tanh|atan|atanh|cot|coth|acot|acoth|sec|sech|asec|asech|csc|csch|acsc|acsch|sqrt|exp|log|log10|log2|abs|conj|re|im|norm|arg|gamma|fact|absre|absim|gi|rec|flip|round|ceil|floor|trunc|erf|rzeta";
+        return "sin|sinh|asin|asinh|cos|cosh|acos|acosh|tan|tanh|atan|atanh|cot|coth|acot|acoth|sec|sech|asec|asech|csc|csch|acsc|acsch|sqrt|exp|log|log10|log2|abs|conj|re|im|norm|arg|gamma|fact|absre|absim|gi|rec|flip|round|ceil|floor|trunc|erf|rzeta"
+                + "|vsin|avsin|vcos|avcos|cvsin|acvsin|cvcos|acvcos|hvsin|ahvsin|hvcos|ahvcos|hcvsin|ahcvsin|hcvcos|ahcvcos|exsec|aexsec|excsc|aexcsc";
     }
 
     /**
@@ -599,6 +780,66 @@ public class FunctionExpressionNode implements ExpressionNode {
 
             case R_ZETA:
                 return argument.getValue().riemann_zeta();
+                
+            case VSIN:
+                return argument.getValue().vsin();
+                
+            case AVSIN:
+                return argument.getValue().avsin();
+                
+            case VCOS:
+                return argument.getValue().vcos();
+                
+            case AVCOS:
+                return argument.getValue().avcos();
+                
+            case CVSIN:
+                return argument.getValue().cvsin();
+                
+            case ACVSIN:
+                return argument.getValue().acvsin();
+                
+            case CVCOS:
+                return argument.getValue().cvcos();
+                
+            case ACVCOS:
+                return argument.getValue().acvcos();
+                
+            case HVSIN:
+                return argument.getValue().hvsin();
+                
+            case AHVSIN:
+                return argument.getValue().ahvsin();
+                
+            case HVCOS:
+                return argument.getValue().hvcos();
+                
+            case AHVCOS:
+                return argument.getValue().ahvcos();
+                
+            case HCVSIN:
+                return argument.getValue().hcvsin();
+                
+            case AHCVSIN:
+                return argument.getValue().ahcvsin();
+                
+            case HCVCOS:
+                return argument.getValue().hcvcos();
+                
+            case AHCVCOS:
+                return argument.getValue().ahcvcos();
+                
+            case EXSEC:
+                return argument.getValue().exsec();
+                
+            case AEXSEC:
+                return argument.getValue().aexsec();
+            
+            case EXCSC:
+                return argument.getValue().excsc();
+                
+            case AEXCSC:
+                return argument.getValue().aexcsc();
 
         }
 

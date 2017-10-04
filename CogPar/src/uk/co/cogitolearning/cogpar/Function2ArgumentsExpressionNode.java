@@ -106,6 +106,11 @@ public class Function2ArgumentsExpressionNode implements ExpressionNode {
      * function id for the fuzz function
      */
     public static final int FUZZ = 18;
+    
+    /**
+     * function id for the n-norm function
+     */
+    public static final int NNORM = 19;
 
     /**
      * the id of the function to apply to the argument
@@ -227,6 +232,10 @@ public class Function2ArgumentsExpressionNode implements ExpressionNode {
         if(str.equals("fuzz")) {
             return Function2ArgumentsExpressionNode.FUZZ;
         }
+        
+        if(str.equals("normn")) {
+            return Function2ArgumentsExpressionNode.NNORM;
+        }
 
         throw new ParserException("Unexpected Function " + str + " found.");
     }
@@ -240,7 +249,7 @@ public class Function2ArgumentsExpressionNode implements ExpressionNode {
      * @return a string containing all the function names
      */
     public static String getAllFunctions() {
-        return "bipol|ibipol|inflect|foldu|foldd|foldl|foldr|foldi|foldo|shear|cmp|add|sub|mul|div|rem|pow|logn|fuzz";
+        return "bipol|ibipol|inflect|foldu|foldd|foldl|foldr|foldi|foldo|shear|cmp|add|sub|mul|div|rem|pow|logn|fuzz|normn";
     }
 
     /**
@@ -308,6 +317,9 @@ public class Function2ArgumentsExpressionNode implements ExpressionNode {
                 
             case FUZZ:
                 return argument.getValue().fuzz(argument2.getValue());
+            
+            case NNORM:
+                return argument.getValue().nnorm(argument2.getValue());
         }
 
         throw new EvaluationException("Invalid function id " + function + "!");
