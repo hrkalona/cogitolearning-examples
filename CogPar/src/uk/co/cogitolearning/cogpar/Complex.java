@@ -14,18 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package uk.co.cogitolearning.cogpar;
 
 public final class Complex {
-
-    private static final double pi_2;
     private double re;
     private double im;
-
-    static {
-        pi_2 = Math.PI / 2;
-    }
 
     public Complex() {
 
@@ -1158,7 +1151,7 @@ public final class Complex {
      */
     public final Complex acos() {
 
-        return this.asin().r_sub(pi_2);
+        return this.asin().r_sub(Math.PI * 0.5);
 
     }
 
@@ -1356,7 +1349,7 @@ public final class Complex {
      */
     public final Complex asec() {
 
-        return (((this.square().reciprocal()).r_sub(1).sqrt()).plus(this.i_divide(1))).log().times_i(1).plus(pi_2);
+        return (((this.square().reciprocal()).r_sub(1).sqrt()).plus(this.i_divide(1))).log().times_i(1).plus(Math.PI * 0.5);
 
     }
 
@@ -1975,7 +1968,7 @@ public final class Complex {
 
              Complex sum2 = temp.riemann_zeta();
                        
-             sum = (new Complex(2, 0).pow(this)).times(new Complex(Math.PI, 0).pow(this.sub(1))).times(gamma).times(this.times(pi_2).sin()).times(sum2);
+             sum = (new Complex(2, 0).pow(this)).times(new Complex(Math.PI, 0).pow(this.sub(1))).times(gamma).times(this.times(Math.PI * 0.5).sin()).times(sum2);
         }
    
         return sum;
@@ -2175,6 +2168,22 @@ public final class Complex {
         }
 
         return out;
+    }
+    
+    public final Complex rotate(Complex degrees) {
+        
+        Complex toDeg = degrees.divide(180.0).times(Math.PI);
+        
+        return this.times((toDeg.times_i(1)).exp());
+        
+    }
+    
+    public final Complex rotate_mutable(Complex degrees) {
+        
+        Complex toDeg = degrees.divide(180.0).times(Math.PI);
+        
+        return this.times_mutable((toDeg.times_i(1)).exp());
+        
     }
 
     public final Complex fuzz_mutable(Complex distance) {
