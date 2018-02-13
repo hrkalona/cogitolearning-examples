@@ -349,6 +349,11 @@ public class FunctionExpressionNode implements ExpressionNode {
      * function id for the arc excosecant function
      */
     public static final int AEXCSC = 68;
+    
+    /**
+     * function id for the dirichlet eta function
+     */
+    public static final int D_ETA = 69;
 
     /**
      * the id of the function to apply to the argument
@@ -556,6 +561,10 @@ public class FunctionExpressionNode implements ExpressionNode {
             return FunctionExpressionNode.R_ZETA;
         }
         
+        if (str.equals("deta")) {
+            return FunctionExpressionNode.D_ETA;
+        }
+        
         if (str.equals("vsin")) {
             return FunctionExpressionNode.VSIN;
         }
@@ -648,7 +657,7 @@ public class FunctionExpressionNode implements ExpressionNode {
      * @return a string containing all the function names
      */
     public static String getAllFunctions() {
-        return "sin|sinh|asin|asinh|cos|cosh|acos|acosh|tan|tanh|atan|atanh|cot|coth|acot|acoth|sec|sech|asec|asech|csc|csch|acsc|acsch|sqrt|exp|log|log10|log2|abs|conj|re|im|norm|arg|gamma|fact|absre|absim|gi|rec|flip|round|ceil|floor|trunc|erf|rzeta"
+        return "sin|sinh|asin|asinh|cos|cosh|acos|acosh|tan|tanh|atan|atanh|cot|coth|acot|acoth|sec|sech|asec|asech|csc|csch|acsc|acsch|sqrt|exp|log|log10|log2|abs|conj|re|im|norm|arg|gamma|fact|absre|absim|gi|rec|flip|round|ceil|floor|trunc|erf|rzeta|deta"
                 + "|vsin|avsin|vcos|avcos|cvsin|acvsin|cvcos|acvcos|hvsin|ahvsin|hvcos|ahvcos|hcvsin|ahcvsin|hcvcos|ahcvcos|exsec|aexsec|excsc|aexcsc";
     }
 
@@ -840,6 +849,9 @@ public class FunctionExpressionNode implements ExpressionNode {
                 
             case AEXCSC:
                 return argument.getValue().aexcsc();
+                
+            case D_ETA:
+                return argument.getValue().dirichlet_eta();
 
         }
 
