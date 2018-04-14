@@ -121,7 +121,7 @@ public class Parser {
      * handles the non-terminal expression
      */
     private ExpressionNode expression() {
-    // only one rule
+        // only one rule
         // expression -> signed_term sum_op
         ExpressionNode expr = signedTerm();
         expr = sumOp(expr);
@@ -135,7 +135,7 @@ public class Parser {
         // sum_op -> PLUSMINUS signed_term sum_op
         if(lookahead.token == Token.PLUSMINUS) {
             AdditionExpressionNode sum;
-      // This means we are actually dealing with a sum
+            // This means we are actually dealing with a sum
             // If expr is not already a sum, we have to create one
             if(expr.getType() == ExpressionNode.ADDITION_NODE) {
                 sum = (AdditionExpressionNode)expr;
@@ -145,7 +145,7 @@ public class Parser {
             }
 
             // reduce the input and recursively call sum_op
-            int mode =  lookahead.sequence.equals("+") ? AdditionExpressionNode.ADD : AdditionExpressionNode.SUB;
+            int mode = lookahead.sequence.equals("+") ? AdditionExpressionNode.ADD : AdditionExpressionNode.SUB;
             nextToken();
             ExpressionNode t = signedTerm();
             sum.add(t, mode);
@@ -195,7 +195,7 @@ public class Parser {
         if(lookahead.token == Token.MULTDIVREM) {
             MultiplicationExpressionNode prod;
 
-      // This means we are actually dealing with a product
+            // This means we are actually dealing with a product
             // If expr is not already a product, we have to create one
             if(expression.getType() == ExpressionNode.MULTIPLICATION_NODE) {
                 prod = (MultiplicationExpressionNode)expression;
@@ -206,7 +206,7 @@ public class Parser {
 
             // reduce the input and recursively call sum_op
             int mode;
-            
+
             if(lookahead.sequence.equals("*")) {
                 mode = MultiplicationExpressionNode.MULT;
             }
@@ -312,7 +312,7 @@ public class Parser {
     private ExpressionNode[] functionArgument2() {
         if(lookahead.token == Token.OPEN_BRACKET) {
             ExpressionNode[] exprs = new ExpressionNode[2];
-            
+
             nextToken();
             exprs[0] = expression();
             if(lookahead.token != Token.COMMA) {
@@ -329,22 +329,22 @@ public class Parser {
 
         throw new ParserException("Opening brackets expected.", lookahead);
     }
-    
-     /*handles the function with 1 argument */
+
+    /*handles the function with 1 argument */
     private ExpressionNode functionArgument() {
-        if(lookahead.token == Token.OPEN_BRACKET) {          
+        if(lookahead.token == Token.OPEN_BRACKET) {
             nextToken();
             ExpressionNode expr = expression();
             if(lookahead.token != Token.CLOSE_BRACKET) {
                 throw new ParserException("Closing brackets expected.", lookahead);
             }
-            nextToken();  
+            nextToken();
             return expr;
         }
 
         throw new ParserException("Opening brackets expected.", lookahead);
     }
-    
+
     /**
      * handles the non-terminal value
      */
@@ -364,7 +364,7 @@ public class Parser {
                 expr = new ImaginaryConstantExpressionNode(tok.nextToken());
             }
             else {
-                expr = new ImaginaryConstantExpressionNode("1.0");
+                expr = new ImaginaryConstantExpressionNode(1.0);
             }
             nextToken();
             return expr;
@@ -372,18 +372,18 @@ public class Parser {
 
         // argument -> VARIABLE
         if(lookahead.token == Token.VARIABLE) {
-            ExpressionNode expr = new VariableExpressionNode(lookahead.sequence);
+            RealConstantExpressionNode expr = null;
 
             if(lookahead.sequence.equalsIgnoreCase("pi")) {
-                ((VariableExpressionNode)expr).setValue(new Complex(Math.PI, 0));
+                expr = new RealConstantExpressionNode(Math.PI);
             }
 
             if(lookahead.sequence.equalsIgnoreCase("e")) {
-                ((VariableExpressionNode)expr).setValue(new Complex(Math.E, 0));
+                expr = new RealConstantExpressionNode(Math.E);
             }
 
             if(lookahead.sequence.equalsIgnoreCase("phi")) {
-                ((VariableExpressionNode)expr).setValue(new Complex(1.618033988749895, 0));
+                expr = new RealConstantExpressionNode(1.618033988749895);
             }
 
             nextToken();

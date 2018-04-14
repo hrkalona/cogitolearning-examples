@@ -5,6 +5,8 @@
  */
 package uk.co.cogitolearning.cogpar;
 
+import uk.co.cogitolearning.cogpar.functions.*;
+
 /**
  * An ExpressionNode that handles mathematical functions with 2 arguments.
  *
@@ -26,91 +28,91 @@ public class Function2ArgumentsExpressionNode implements ExpressionNode {
      * function id for the inflection function
      */
     public static final int INFLECTION = 2;
-    
-     /**
+
+    /**
      * function id for the fold up function
      */
     public static final int FOLD_UP = 3;
-    
+
     /**
      * function id for the fold down function
      */
     public static final int FOLD_DOWN = 4;
-    
+
     /**
      * function id for the fold left function
      */
     public static final int FOLD_LEFT = 5;
-    
+
     /**
      * function id for the fold right function
      */
     public static final int FOLD_RIGHT = 6;
-    
+
     /**
      * function id for the fold in function
      */
     public static final int FOLD_IN = 7;
-    
+
     /**
      * function id for the fold out function
      */
     public static final int FOLD_OUT = 8;
-    
+
     /**
      * function id for the shear function
      */
     public static final int SHEAR = 9;
-    
+
     /**
      * function id for the compare function
      */
     public static final int COMPARE = 10;
-    
+
     /**
      * function id for the add function
      */
     public static final int ADD = 11;
-    
+
     /**
      * function id for the subtract function
      */
     public static final int SUB = 12;
-    
+
     /**
      * function id for the multiply function
      */
     public static final int MUL = 13;
-    
+
     /**
      * function id for the divide function
      */
     public static final int DIV = 14;
-    
+
     /**
      * function id for the reminder function
      */
     public static final int REM = 15;
-    
+
     /**
      * function id for the power function
      */
     public static final int POW = 16;
-    
+
     /**
      * function id for the log base n function
      */
     public static final int LOGN = 17;
-    
+
     /**
      * function id for the fuzz function
      */
     public static final int FUZZ = 18;
     
     /**
-     * function id for the n-norm function
+     * function id for the norm-n function
      */
-    public static final int NNORM = 19;
+    public static final int NORMN = 19;
     
     /**
      * function id for the rotation function
@@ -118,15 +120,16 @@ public class Function2ArgumentsExpressionNode implements ExpressionNode {
     public static final int ROT = 20;
 
     /**
-     * the id of the function to apply to the argument
+     * the function to apply to the arguments
      */
-    private int function;
+    private AbstractTwoArgumentFunction function;
+    private int functionId;
 
     /**
      * the argument of the function
      */
     private ExpressionNode argument;
-    
+
     /**
      * the second argument of the function
      */
@@ -135,20 +138,110 @@ public class Function2ArgumentsExpressionNode implements ExpressionNode {
     /**
      * Construct a function by id and argument.
      *
-     * @param function the id of the function to apply
+     * @param functionId the id of the function to apply
      * @param argument the first argument of the function
      * @param argument2 the second argument of the function
      */
-    public Function2ArgumentsExpressionNode(int function, ExpressionNode argument, ExpressionNode argument2) {
+    public Function2ArgumentsExpressionNode(int functionId, ExpressionNode argument, ExpressionNode argument2) {
         super();
-        this.function = function;
+        this.functionId = functionId;
         this.argument = argument;
         this.argument2 = argument2;
+        
+        switch (functionId) {
+
+            case TO_BIPOLAR:
+                function = new ToBipolarFunction();
+                break;
+
+            case FROM_BIPOLAR:
+                function = new FromBipolarFunction();
+                break;
+
+            case INFLECTION:
+                function = new InflectFunction();
+                break;
+
+            case FOLD_UP:
+                function = new FoldUpFunction();
+                break;
+
+            case FOLD_DOWN:
+                function = new FoldDownFunction();
+                break;
+
+            case FOLD_LEFT:
+                function = new FoldLeftFunction();
+                break;
+
+            case FOLD_RIGHT:
+                function = new FoldRightFunction();
+                break;
+
+            case FOLD_IN:
+                function = new FoldInFunction();
+                break;
+
+            case FOLD_OUT:
+                function = new FoldOutFunction();
+                break;
+
+            case SHEAR:
+                function = new ShearFunction();
+                break;
+
+            case COMPARE:
+                function = new CompareFunction();
+                break;
+
+            case ADD:
+                function = new AddFunction();
+                break;
+
+            case SUB:
+                function = new SubFunction();
+                break;
+
+            case MUL:
+                function = new MulFunction();
+                break;
+
+            case DIV:
+                function = new DivFunction();
+                break;
+
+            case REM:
+                function = new RemFunction();
+                break;
+
+            case POW:
+                function = new PowFunction();
+                break;
+
+            case LOGN:
+                function = new LogNFunction();
+                break;
+                
+            case FUZZ:
+                function = new FuzzFunction();
+                break;
+                
+            case NORMN:
+                function = new NormNFunction();
+                break;
+                
+            case ROT:
+                function = new RotFunction();
+                break;
+
+        }
     }
 
     /**
-     * Returns the type of the node, in this case ExpressionNode.FUNCTION_2_ARG_NODE
+     * Returns the type of the node, in this case
+     * ExpressionNode.FUNCTION_2_ARG_NODE
      */
+    @Override
     public int getType() {
         return ExpressionNode.FUNCTION_2_ARG_NODE;
     }
@@ -162,89 +255,89 @@ public class Function2ArgumentsExpressionNode implements ExpressionNode {
      * @return the id of the function
      */
     public static int stringToFunction(String str) {
-        if(str.equals("bipol")) {
+        if (str.equals("bipol")) {
             return Function2ArgumentsExpressionNode.TO_BIPOLAR;
         }
 
-        if(str.equals("ibipol")) {
+        if (str.equals("ibipol")) {
             return Function2ArgumentsExpressionNode.FROM_BIPOLAR;
         }
-        
-        if(str.equals("inflect")) {
+
+        if (str.equals("inflect")) {
             return Function2ArgumentsExpressionNode.INFLECTION;
         }
-        
-        if(str.equals("foldu")) {
+
+        if (str.equals("foldu")) {
             return Function2ArgumentsExpressionNode.FOLD_UP;
         }
-        
-        if(str.equals("foldd")) {
+
+        if (str.equals("foldd")) {
             return Function2ArgumentsExpressionNode.FOLD_DOWN;
         }
-        
-        if(str.equals("foldl")) {
+
+        if (str.equals("foldl")) {
             return Function2ArgumentsExpressionNode.FOLD_LEFT;
         }
-        
-        if(str.equals("foldr")) {
+
+        if (str.equals("foldr")) {
             return Function2ArgumentsExpressionNode.FOLD_RIGHT;
         }
-        
-        if(str.equals("foldi")) {
+
+        if (str.equals("foldi")) {
             return Function2ArgumentsExpressionNode.FOLD_IN;
         }
-        
-        if(str.equals("foldo")) {
+
+        if (str.equals("foldo")) {
             return Function2ArgumentsExpressionNode.FOLD_OUT;
         }
-        
-        if(str.equals("shear")) {
+
+        if (str.equals("shear")) {
             return Function2ArgumentsExpressionNode.SHEAR;
         }
-        
-        if(str.equals("cmp")) {
+
+        if (str.equals("cmp")) {
             return Function2ArgumentsExpressionNode.COMPARE;
         }
-        
-        if(str.equals("add")) {
+
+        if (str.equals("add")) {
             return Function2ArgumentsExpressionNode.ADD;
         }
-        
-        if(str.equals("sub")) {
+
+        if (str.equals("sub")) {
             return Function2ArgumentsExpressionNode.SUB;
         }
-        
-        if(str.equals("mul")) {
+
+        if (str.equals("mul")) {
             return Function2ArgumentsExpressionNode.MUL;
         }
-        
-        if(str.equals("div")) {
+
+        if (str.equals("div")) {
             return Function2ArgumentsExpressionNode.DIV;
         }
-        
-        if(str.equals("rem")) {
+
+        if (str.equals("rem")) {
             return Function2ArgumentsExpressionNode.REM;
         }
-        
-        if(str.equals("pow")) {
+
+        if (str.equals("pow")) {
             return Function2ArgumentsExpressionNode.POW;
         }
-        
-        if(str.equals("logn")) {
+
+        if (str.equals("logn")) {
             return Function2ArgumentsExpressionNode.LOGN;
         }
         
-        if(str.equals("fuzz")) {
+        if (str.equals("fuzz")) {
             return Function2ArgumentsExpressionNode.FUZZ;
         }
         
-        if(str.equals("normn")) {
-            return Function2ArgumentsExpressionNode.NNORM;
-        }
+        if (str.equals("normn")) {
+            return Function2ArgumentsExpressionNode.NORMN;
+        } 
         
-        if(str.equals("rot")) {
+        if (str.equals("rot")) {
             return Function2ArgumentsExpressionNode.ROT;
-        }
+        } 
 
         throw new ParserException("Unexpected Function " + str + " found.");
     }
@@ -267,74 +360,16 @@ public class Function2ArgumentsExpressionNode implements ExpressionNode {
      * The argument is evaluated and then the function is applied to the
      * resulting value.
      */
+    @Override
     public Complex getValue() {
-        switch (function) {
-            
-            case TO_BIPOLAR:
-                return argument.getValue().toBiPolar(argument2.getValue());
-
-            case FROM_BIPOLAR:
-                return argument.getValue().fromBiPolar(argument2.getValue());
-                
-            case INFLECTION:
-                return argument.getValue().inflection(argument2.getValue());    
-                
-            case FOLD_UP:
-                return argument.getValue().fold_up(argument2.getValue());
-                
-            case FOLD_DOWN:
-                return argument.getValue().fold_down(argument2.getValue());                
-                
-            case FOLD_LEFT:
-                return argument.getValue().fold_left(argument2.getValue());
-                
-            case FOLD_RIGHT:
-                return argument.getValue().fold_right(argument2.getValue());
-                
-            case FOLD_IN:
-                return argument.getValue().fold_in(argument2.getValue());
-                
-            case FOLD_OUT:
-                return argument.getValue().fold_out(argument2.getValue());
-                
-            case SHEAR:
-                return argument.getValue().shear(argument2.getValue());
-                
-            case COMPARE:
-                return new Complex(argument.getValue().compare(argument2.getValue()), 0);
-                
-            case ADD:
-                return argument.getValue().plus(argument2.getValue());
-                
-            case SUB:
-                return argument.getValue().sub(argument2.getValue());
-                
-            case MUL:
-                return argument.getValue().times(argument2.getValue());
-                
-            case DIV:
-                return argument.getValue().divide(argument2.getValue());
-                
-            case REM:
-                return argument.getValue().remainder(argument2.getValue());
-                
-            case POW:
-                return argument.getValue().pow(argument2.getValue());
-                
-            case LOGN:
-                return argument.getValue().log().divide(argument2.getValue().log());
-                
-            case FUZZ:
-                return argument.getValue().fuzz(argument2.getValue());
-            
-            case NNORM:
-                return argument.getValue().nnorm(argument2.getValue());
-                
-            case ROT:
-                return argument.getValue().rotate(argument2.getValue());
+        
+        try {
+            return function.evaluate(argument.getValue(), argument2.getValue());
         }
-
-        throw new EvaluationException("Invalid function id " + function + "!");
+        catch(Exception ex) {
+            throw new EvaluationException("Invalid function id " + functionId + "!");
+        }
+        
     }
 
     /**
@@ -350,5 +385,4 @@ public class Function2ArgumentsExpressionNode implements ExpressionNode {
         argument.accept(visitor);
         argument2.accept(visitor);
     }
-
 }
