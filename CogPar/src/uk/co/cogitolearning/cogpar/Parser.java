@@ -261,7 +261,7 @@ public class Parser {
      * handles the non-terminal factor_op
      */
     private ExpressionNode factorOp(ExpressionNode expr) {
-        // factor_op -> RAISED expression
+        // factor_op -> RAISED signed_factor
         if(lookahead.token == Token.RAISED) {
             nextToken();
             ExpressionNode exponent = signedFactor();
@@ -277,7 +277,7 @@ public class Parser {
      * handles the non-terminal argument
      */
     private ExpressionNode argument() {
-        // argument -> FUNCTION argument
+        // argument -> FUNCTION function_argument
         if(lookahead.token == Token.FUNCTION) {
             int function = FunctionExpressionNode.stringToFunction(lookahead.sequence);
 
@@ -285,7 +285,7 @@ public class Parser {
             ExpressionNode expr = functionArgument();
             return new FunctionExpressionNode(function, expr);
         }
-        // argument -> FUNCTION_2ARG argument
+        // argument -> FUNCTION_2ARG function_argument2
         else if(lookahead.token == Token.FUNCTION_2ARGUMENTS) {
             int function = Function2ArgumentsExpressionNode.stringToFunction(lookahead.sequence);
 
@@ -293,7 +293,7 @@ public class Parser {
             ExpressionNode expr[] = functionArgument2();
             return new Function2ArgumentsExpressionNode(function, expr[0], expr[1]);
         }
-        // argument -> OPEN_BRACKET sum CLOSE_BRACKET
+        // argument -> OPEN_BRACKET expression CLOSE_BRACKET
         else if(lookahead.token == Token.OPEN_BRACKET) {
             nextToken();
             ExpressionNode expr = expression();
@@ -310,6 +310,7 @@ public class Parser {
 
     /*handles the function with 2 arguments */
     private ExpressionNode[] functionArgument2() {
+        // function_argument2 -> OPEN_BRACKET expression COMMA expression CLOSE_BRACKET
         if(lookahead.token == Token.OPEN_BRACKET) {
             ExpressionNode[] exprs = new ExpressionNode[2];
 
@@ -332,6 +333,7 @@ public class Parser {
 
     /*handles the function with 1 argument */
     private ExpressionNode functionArgument() {
+        // function_argument -> OPEN_BRACKET expression CLOSE_BRACKET
         if(lookahead.token == Token.OPEN_BRACKET) {
             nextToken();
             ExpressionNode expr = expression();
@@ -349,14 +351,14 @@ public class Parser {
      * handles the non-terminal value
      */
     private ExpressionNode value() {
-        // argument -> REAL_NUMBER
+        // value -> REAL_NUMBER
         if(lookahead.token == Token.REAL_NUMBER) {
             ExpressionNode expr = new RealConstantExpressionNode(lookahead.sequence);
             nextToken();
             return expr;
         }
 
-        // argument -> IMAGINARY_NUMBER
+        // value -> IMAGINARY_NUMBER
         if(lookahead.token == Token.IMAGINARY_NUMBER) {
             StringTokenizer tok = new StringTokenizer(lookahead.sequence, "iI");
             ExpressionNode expr;
@@ -370,7 +372,7 @@ public class Parser {
             return expr;
         }
 
-        // argument -> VARIABLE
+        // value -> VARIABLE
         if(lookahead.token == Token.VARIABLE) {
             RealConstantExpressionNode expr = null;
 
