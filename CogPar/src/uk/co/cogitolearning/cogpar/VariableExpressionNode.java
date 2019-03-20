@@ -46,6 +46,7 @@ public class VariableExpressionNode implements ExpressionNode
   {
     this.name = name;
     valueSet = false;
+    value = new Complex();
   }
 
   /**

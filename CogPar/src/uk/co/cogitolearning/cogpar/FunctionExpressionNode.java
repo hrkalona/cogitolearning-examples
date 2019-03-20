@@ -349,6 +349,11 @@ public class FunctionExpressionNode implements ExpressionNode {
      * function id for the dirichlet eta function
      */
     public static final int D_ETA = 69;
+    
+    /**
+     * function id for the squared norm function
+     */
+    public static final int SNORM = 70;
 
     /**
      * the function to apply the argument
@@ -626,6 +631,10 @@ public class FunctionExpressionNode implements ExpressionNode {
             case D_ETA:
                 function = new DEtaFunction();
                 break;
+                
+            case SNORM:
+                function = new NormSquaredFunction();
+                break;
 
         }
     }
@@ -897,6 +906,10 @@ public class FunctionExpressionNode implements ExpressionNode {
         if (str.equals("aexcsc")) {
             return FunctionExpressionNode.AEXCSC;
         }
+        
+        if (str.equals("snorm")) {
+            return FunctionExpressionNode.SNORM;
+        }
 
         throw new ParserException("Unexpected Function " + str + " found.");
     }
@@ -912,7 +925,7 @@ public class FunctionExpressionNode implements ExpressionNode {
     public static String getAllFunctions() {
 
         return "sin|sinh|asin|asinh|cos|cosh|acos|acosh|tan|tanh|atan|atanh|cot|coth|acot|acoth|sec|sech|asec|asech|csc|csch|acsc|acsch|sqrt|exp|log|log10|log2|abs|conj|re|im|norm|arg|gamma|fact|absre|absim|gi|rec|flip|round|ceil|floor|trunc|erf|rzeta|deta" 
-                + "|vsin|avsin|vcos|avcos|cvsin|acvsin|cvcos|acvcos|hvsin|ahvsin|hvcos|ahvcos|hcvsin|ahcvsin|hcvcos|ahcvcos|exsec|aexsec|excsc|aexcsc";
+                + "|vsin|avsin|vcos|avcos|cvsin|acvsin|cvcos|acvcos|hvsin|ahvsin|hvcos|ahvcos|hcvsin|ahcvsin|hcvcos|ahcvcos|exsec|aexsec|excsc|aexcsc|snorm";
         
     }
 
@@ -924,13 +937,8 @@ public class FunctionExpressionNode implements ExpressionNode {
      */
     @Override
     public Complex getValue() {
- 
-        try {
-            return function.evaluate(argument.getValue());
-        }
-        catch(Exception ex) {
-            throw new EvaluationException("Invalid function id " + functionId + "!");
-        }
+        
+        return function.evaluate(argument.getValue());
         
     }
 

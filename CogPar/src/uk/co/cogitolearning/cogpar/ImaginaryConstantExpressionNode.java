@@ -66,7 +66,7 @@ public class ImaginaryConstantExpressionNode implements ExpressionNode
    */
   public Complex getValue()
   {
-    return value;
+    return new Complex(value);
   }
 
   /**
