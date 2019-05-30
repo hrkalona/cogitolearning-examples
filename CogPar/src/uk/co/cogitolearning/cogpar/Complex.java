@@ -1,5 +1,5 @@
 /* 
- * Fractal Zoomer, Copyright (C) 2018 hrkalona2
+ * Fractal Zoomer, Copyright (C) 2019 hrkalona2
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,11 @@
 package uk.co.cogitolearning.cogpar;
 
 public final class Complex {
+    public static final double HALF_PI = Math.PI * 0.5;
+    public static final double TWO_PI = Math.PI * 2;
+    public static final double SQRT_PI = Math.sqrt(Math.PI);
+    public static final double SQRT_TWO_PI = Math.sqrt(TWO_PI);
+    public static final double HALF = 0.5 - 1e-14;
 
     private double re;
     private double im;
@@ -39,6 +44,13 @@ public final class Complex {
 
         re = z.re;
         im = z.im;
+
+    }
+
+    public final void reset() {
+
+        re = 0;
+        im = 0;
 
     }
 
@@ -70,6 +82,13 @@ public final class Complex {
 
         re = z.re;
         im = z.im;
+
+    }
+    
+    public final void assign(double re) {
+
+        this.re = re;
+        im = 0;
 
     }
 
@@ -452,8 +471,13 @@ public final class Complex {
      * z = z1 % z2
      */
     public final Complex remainder(Complex z) {
-
-        return this.sub(z.times(this.divide(z).trunc()));
+        
+        if(z.im == 0 && im == 0 && re >= 0 && z.re >= 0)
+        {
+            return this.sub(z.times(this.divide(z).trunc_mutable()));
+        }
+        
+        return this.sub(z.times(this.divide(z).gaussian_integer_mutable()));
 
     }
 
@@ -461,8 +485,13 @@ public final class Complex {
      * z1 = z1 % z2
      */
     public final Complex remainder_mutable(Complex z) {
+        
+        if(z.im == 0 && im == 0 && re >= 0 && z.re >= 0)
+        {
+            return this.sub_mutable(z.times(this.divide(z).trunc_mutable()));
+        }
 
-        return this.sub_mutable(z.times(this.divide(z).trunc_mutable()));
+        return this.sub_mutable(z.times(this.divide(z).gaussian_integer_mutable()));
 
     }
 
@@ -471,7 +500,12 @@ public final class Complex {
      */
     public final Complex remainder(double real) {
 
-        return this.sub(this.divide(real).trunc().times(real));
+        if(im == 0 && re >= 0 && real >= 0)
+        {
+            return this.sub(this.divide(real).trunc_mutable().times_mutable(real));
+        }
+        
+        return this.sub(this.divide(real).gaussian_integer_mutable().times_mutable(real));
 
     }
 
@@ -480,7 +514,12 @@ public final class Complex {
      */
     public final Complex remainder_mutable(double real) {
 
-        return this.sub_mutable(this.divide(real).trunc_mutable().times_mutable(real));
+        if(im == 0 && re >= 0 && real >= 0)
+        {
+            return this.sub_mutable(this.divide(real).trunc_mutable().times_mutable(real));
+        }
+        
+        return this.sub_mutable(this.divide(real).gaussian_integer_mutable().times_mutable(real));
 
     }
 
@@ -489,7 +528,7 @@ public final class Complex {
      */
     public final Complex remainder_i(double imaginary) {
 
-        return this.sub(this.divide_i(imaginary).trunc().times_i(imaginary));
+        return this.sub(this.divide_i(imaginary).gaussian_integer_mutable().times_i_mutable(imaginary));
 
     }
 
@@ -498,7 +537,7 @@ public final class Complex {
      */
     public final Complex remainder_i_mutable(double imaginary) {
 
-        return this.sub_mutable(this.divide_i(imaginary).trunc_mutable().times_i_mutable(imaginary));
+        return this.sub_mutable(this.divide_i(imaginary).gaussian_integer_mutable().times_i_mutable(imaginary));
 
     }
 
@@ -507,7 +546,12 @@ public final class Complex {
      */
     public final Complex r_remainder(double real) {
 
-        return (this.r_divide(real).trunc().times(this)).r_sub(real);
+        if(im == 0 && re >= 0 && real >= 0)
+        {
+            return (this.r_divide(real).trunc_mutable().times_mutable(this)).r_sub_mutable(real);
+        }
+        
+        return (this.r_divide(real).gaussian_integer_mutable().times_mutable(this)).r_sub_mutable(real);
 
     }
 
@@ -516,7 +560,14 @@ public final class Complex {
      */
     public final Complex r_remainder_mutable(double real) {
 
-        Complex a = (this.r_divide(real).trunc().times(this)).r_sub(real);
+        Complex a;
+        if(im == 0 && re >= 0 && real >= 0)
+        {
+            a = (this.r_divide(real).trunc_mutable().times_mutable(this)).r_sub_mutable(real);
+        }
+        else {
+            a = (this.r_divide(real).gaussian_integer_mutable().times_mutable(this)).r_sub_mutable(real);
+        }
 
         re = a.re;
         im = a.im;
@@ -530,7 +581,7 @@ public final class Complex {
      */
     public final Complex i_remainder(double imaginary) {
 
-        return (this.i_divide(imaginary).trunc().times(this)).i_sub(imaginary);
+        return (this.i_divide(imaginary).gaussian_integer_mutable().times_mutable(this)).i_sub_mutable(imaginary);
 
     }
 
@@ -539,7 +590,7 @@ public final class Complex {
      */
     public final Complex i_remainder_mutable(double imaginary) {
 
-        Complex a = (this.i_divide(imaginary).trunc().times(this)).i_sub(imaginary);
+        Complex a = (this.i_divide(imaginary).gaussian_integer_mutable().times_mutable(this)).i_sub_mutable(imaginary);
 
         re = a.re;
         im = a.im;
@@ -872,7 +923,7 @@ public final class Complex {
         Complex a = new Complex(tempRe, 0);
         Complex b = new Complex(tempIm, 0);
 
-        return (a.pow(n).plus(b.pow(n))).pow(n.reciprocal());
+        return (a.pow(n).plus_mutable(b.pow(n))).pow(n.reciprocal());
 
     }
 
@@ -1133,7 +1184,7 @@ public final class Complex {
         double temp3 = Math.exp(im);
         Complex temp4 = new Complex(temp3 * cos_re, temp3 * -sin_re);
 
-        return (temp2.plus(temp4)).times(0.5);
+        return (temp2.plus_mutable(temp4)).times_mutable(0.5);
 
     }
 
@@ -1152,7 +1203,7 @@ public final class Complex {
         double temp3 = Math.exp(-re);
         Complex temp4 = new Complex(temp3 * cos_im, temp3 * -sin_im);
 
-        return (temp2.plus(temp4)).times(0.5);
+        return (temp2.plus_mutable(temp4)).times_mutable(0.5);
 
     }
 
@@ -1161,7 +1212,7 @@ public final class Complex {
      */
     public final Complex acos() {
 
-        return this.asin().r_sub(Math.PI * 0.5);
+        return this.asin().r_sub_mutable(HALF_PI);
 
     }
 
@@ -1170,7 +1221,7 @@ public final class Complex {
      */
     public final Complex acosh() {
 
-        return this.plus((this.square().sub(1)).sqrt()).log();
+        return this.plus((this.square().sub_mutable(1)).sqrt_mutable()).log_mutable();
 
     }
 
@@ -1189,7 +1240,7 @@ public final class Complex {
         double temp3 = Math.exp(im);
         Complex temp4 = new Complex(temp3 * cos_re, temp3 * -sin_re);
 
-        return (temp2.sub(temp4)).times_i(-0.5);
+        return (temp2.sub_mutable(temp4)).times_i_mutable(-0.5);
 
     }
 
@@ -1208,7 +1259,7 @@ public final class Complex {
         double temp3 = Math.exp(-re);
         Complex temp4 = new Complex(temp3 * cos_im, temp3 * -sin_im);
 
-        return (temp2.sub(temp4)).times(0.5);
+        return (temp2.sub_mutable(temp4)).times_mutable(0.5);
 
     }
 
@@ -1217,7 +1268,7 @@ public final class Complex {
      */
     public final Complex asin() {
 
-        return this.times_i(1).plus((this.square().r_sub(1)).sqrt()).log().times_i(-1);
+        return this.times_i(1).plus_mutable((this.square().r_sub_mutable(1)).sqrt_mutable()).log_mutable().times_i_mutable(-1);
 
     }
 
@@ -1226,7 +1277,7 @@ public final class Complex {
      */
     public final Complex asinh() {
 
-        return this.plus((this.square().plus(1)).sqrt()).log();
+        return this.plus((this.square().plus_mutable(1)).sqrt_mutable()).log_mutable();
 
     }
 
@@ -1244,7 +1295,7 @@ public final class Complex {
 
         Complex temp2 = new Complex(temp * cos_re, temp * -sin_re);
 
-        return (temp2.r_sub(1)).divide((temp2.plus(1)).times_i(1));
+        return (temp2.r_sub(1)).divide_mutable((temp2.plus(1)).times_i_mutable(1));
 
     }
 
@@ -1262,7 +1313,7 @@ public final class Complex {
 
         Complex temp2 = new Complex(temp * cos_im, temp * -sin_im);
 
-        return (temp2.r_sub(1)).divide(temp2.plus(1));
+        return (temp2.r_sub(1)).divide_mutable(temp2.plus(1));
 
     }
 
@@ -1273,7 +1324,7 @@ public final class Complex {
 
         Complex temp = this.times_i(1);
 
-        return ((temp.r_sub(1)).divide(temp.plus(1))).log().times_i(0.5);
+        return ((temp.r_sub(1)).divide_mutable(temp.plus(1))).log_mutable().times_i_mutable(0.5);
 
     }
 
@@ -1282,7 +1333,7 @@ public final class Complex {
      */
     public final Complex atanh() {
 
-        return ((this.plus(1)).divide(this.r_sub(1))).log().times(0.5);
+        return ((this.plus(1)).divide_mutable(this.r_sub(1))).log_mutable().times_mutable(0.5);
 
     }
 
@@ -1300,7 +1351,7 @@ public final class Complex {
 
         Complex temp2 = new Complex(temp * cos_re, temp * -sin_re);
 
-        return (temp2.times_i(1).plus_i(1)).divide(temp2.r_sub(1));
+        return (temp2.times_i(1).plus_i_mutable(1)).divide_mutable(temp2.r_sub(1));
 
     }
 
@@ -1318,7 +1369,7 @@ public final class Complex {
 
         Complex temp2 = new Complex(temp * cos_im, temp * -sin_im);
 
-        return (temp2.plus(1)).divide(temp2.r_sub(1));
+        return (temp2.plus(1)).divide_mutable(temp2.r_sub(1));
 
     }
 
@@ -1330,7 +1381,7 @@ public final class Complex {
         Complex temp = this.times_i(1);
         Complex temp2 = this.square();
 
-        return ((temp2.sub(temp)).divide(temp2.plus(temp))).log().times_i(0.5);
+        return ((temp2.sub(temp)).divide_mutable(temp2.plus(temp))).log_mutable().times_i_mutable(0.5);
 
     }
 
@@ -1341,7 +1392,7 @@ public final class Complex {
 
         Complex temp = this.reciprocal();
 
-        return ((temp.plus(1)).divide(temp.r_sub(1))).log().times(0.5);
+        return ((temp.plus(1)).divide_mutable(temp.r_sub(1))).log_mutable().times_mutable(0.5);
 
     }
 
@@ -1350,7 +1401,7 @@ public final class Complex {
      */
     public final Complex sec() {
 
-        return this.cos().reciprocal();
+        return this.cos().reciprocal_mutable();
 
     }
 
@@ -1359,7 +1410,7 @@ public final class Complex {
      */
     public final Complex asec() {
 
-        return (((this.square().reciprocal()).r_sub(1).sqrt()).plus(this.i_divide(1))).log().times_i(1).plus(Math.PI * 0.5);
+        return (((this.square().reciprocal_mutable()).r_sub_mutable(1).sqrt_mutable()).plus_mutable(this.i_divide(1))).log_mutable().times_i_mutable(1).plus_mutable(HALF_PI);
 
     }
 
@@ -1368,7 +1419,7 @@ public final class Complex {
      */
     public final Complex sech() {
 
-        return this.cosh().reciprocal();
+        return this.cosh().reciprocal_mutable();
 
     }
 
@@ -1377,7 +1428,7 @@ public final class Complex {
      */
     public final Complex asech() {
 
-        return (((this.square().reciprocal()).sub(1).sqrt()).plus(this.reciprocal())).log();
+        return (((this.square().reciprocal_mutable()).sub_mutable(1).sqrt_mutable()).plus_mutable(this.reciprocal())).log_mutable();
 
     }
 
@@ -1386,7 +1437,7 @@ public final class Complex {
      */
     public final Complex csc() {
 
-        return this.sin().reciprocal();
+        return this.sin().reciprocal_mutable();
 
     }
 
@@ -1395,7 +1446,7 @@ public final class Complex {
      */
     public final Complex acsc() {
 
-        return (((this.square().reciprocal()).r_sub(1).sqrt()).plus(this.i_divide(1))).log().times_i(-1);
+        return (((this.square().reciprocal_mutable()).r_sub_mutable(1).sqrt_mutable()).plus_mutable(this.i_divide(1))).log_mutable().times_i_mutable(-1);
 
     }
 
@@ -1404,7 +1455,7 @@ public final class Complex {
      */
     public final Complex csch() {
 
-        return this.sinh().reciprocal();
+        return this.sinh().reciprocal_mutable();
 
     }
 
@@ -1413,7 +1464,7 @@ public final class Complex {
      */
     public final Complex acsch() {
 
-        return (((this.square().reciprocal()).plus(1).sqrt()).plus(this.reciprocal())).log();
+        return (((this.square().reciprocal_mutable()).plus_mutable(1).sqrt_mutable()).plus_mutable(this.reciprocal())).log_mutable();
 
     }
 
@@ -1422,7 +1473,7 @@ public final class Complex {
      */
     public final Complex vsin() {
 
-        return this.cos().r_sub(1);
+        return this.cos().r_sub_mutable(1);
 
     }
 
@@ -1440,7 +1491,7 @@ public final class Complex {
      */
     public final Complex vcos() {
 
-        return this.cos().plus(1);
+        return this.cos().plus_mutable(1);
 
     }
 
@@ -1458,7 +1509,7 @@ public final class Complex {
      */
     public final Complex cvsin() {
 
-        return this.sin().r_sub(1);
+        return this.sin().r_sub_mutable(1);
 
     }
 
@@ -1476,7 +1527,7 @@ public final class Complex {
      */
     public final Complex cvcos() {
 
-        return this.sin().plus(1);
+        return this.sin().plus_mutable(1);
 
     }
 
@@ -1494,7 +1545,7 @@ public final class Complex {
      */
     public final Complex hvsin() {
 
-        return this.vsin().times(0.5);
+        return this.vsin().times_mutable(0.5);
 
     }
 
@@ -1503,7 +1554,7 @@ public final class Complex {
      */
     public final Complex ahvsin() {
 
-        return this.sqrt().asin().times(2);
+        return this.sqrt().asin().times_mutable(2);
 
     }
 
@@ -1512,7 +1563,7 @@ public final class Complex {
      */
     public final Complex hvcos() {
 
-        return this.vcos().times(0.5);
+        return this.vcos().times_mutable(0.5);
 
     }
 
@@ -1521,7 +1572,7 @@ public final class Complex {
      */
     public final Complex ahvcos() {
 
-        return this.sqrt().acos().times(2);
+        return this.sqrt().acos().times_mutable(2);
 
     }
 
@@ -1530,7 +1581,7 @@ public final class Complex {
      */
     public final Complex hcvsin() {
 
-        return this.cvsin().times(0.5);
+        return this.cvsin().times_mutable(0.5);
 
     }
 
@@ -1539,7 +1590,7 @@ public final class Complex {
      */
     public final Complex ahcvsin() {
 
-        return this.times(2).r_sub(1).asin();
+        return this.times(2).r_sub_mutable(1).asin();
 
     }
 
@@ -1548,7 +1599,7 @@ public final class Complex {
      */
     public final Complex hcvcos() {
 
-        return this.cvcos().times(0.5);
+        return this.cvcos().times_mutable(0.5);
 
     }
 
@@ -1557,7 +1608,7 @@ public final class Complex {
      */
     public final Complex ahcvcos() {
 
-        return this.times(-2).r_sub(1).asin();
+        return this.times(-2).r_sub_mutable(1).asin();
 
     }
 
@@ -1566,7 +1617,7 @@ public final class Complex {
      */
     public final Complex exsec() {
 
-        return this.sec().sub(1);
+        return this.sec().sub_mutable(1);
 
     }
 
@@ -1584,7 +1635,7 @@ public final class Complex {
      */
     public final Complex excsc() {
 
-        return this.csc().sub(1);
+        return this.csc().sub_mutable(1);
 
     }
 
@@ -1653,8 +1704,8 @@ public final class Complex {
 
         Complex[] sin_and_der = new Complex[2];
 
-        sin_and_der[0] = (temp2.sub(temp4)).times_i(-0.5);
-        sin_and_der[1] = (temp2.plus(temp4)).times(0.5);
+        sin_and_der[0] = (temp2.sub(temp4)).times_i_mutable(-0.5);
+        sin_and_der[1] = (temp2.plus(temp4)).times_mutable(0.5);
 
         return sin_and_der;
 
@@ -1677,8 +1728,8 @@ public final class Complex {
 
         Complex[] sin_and_der = new Complex[3];
 
-        sin_and_der[0] = (temp2.sub(temp4)).times_i(-0.5);
-        sin_and_der[1] = (temp2.plus(temp4)).times(0.5);
+        sin_and_der[0] = (temp2.sub(temp4)).times_i_mutable(-0.5);
+        sin_and_der[1] = (temp2.plus(temp4)).times_mutable(0.5);
         sin_and_der[2] = sin_and_der[0].negative();
 
         return sin_and_der;
@@ -1702,8 +1753,8 @@ public final class Complex {
 
         Complex[] sin_and_der = new Complex[2];
 
-        sin_and_der[0] = (temp2.plus(temp4)).times(0.5);
-        sin_and_der[1] = (temp4.sub(temp2)).times_i(-0.5);
+        sin_and_der[0] = (temp2.plus(temp4)).times_mutable(0.5);
+        sin_and_der[1] = (temp4.sub(temp2)).times_i_mutable(-0.5);
 
         return sin_and_der;
 
@@ -1726,8 +1777,8 @@ public final class Complex {
 
         Complex[] sin_and_der = new Complex[3];
 
-        sin_and_der[0] = (temp2.plus(temp4)).times(0.5);
-        sin_and_der[1] = (temp4.sub(temp2)).times_i(-0.5);
+        sin_and_der[0] = (temp2.plus(temp4)).times_mutable(0.5);
+        sin_and_der[1] = (temp4.sub(temp2)).times_i_mutable(-0.5);
         sin_and_der[2] = sin_and_der[0].negative();
 
         return sin_and_der;
@@ -1739,17 +1790,17 @@ public final class Complex {
      */
     public final Complex gaussian_integer() {
 
-        return new Complex((int)(re < 0 ? re - 0.5 : re + 0.5), (int)(im < 0 ? im - 0.5 : im + 0.5));
+        return new Complex((int) (re < 0 ? re - HALF : re + HALF), (int) (im < 0 ? im - HALF : im + HALF));
 
     }
 
     /*
      *  z = The closest Gaussian Integer to the Complex number
      */
-    public final Complex gaussian_integer_mutable() {
-
-        re = (int)(re < 0 ? re - 0.5 : re + 0.5);
-        im = (int)(im < 0 ? im - 0.5 : im + 0.5);
+    public final Complex gaussian_integer_mutable() {;
+        
+        re = (int) (re < 0 ? re - HALF : re + HALF);
+        im = (int) (im < 0 ? im - HALF : im + HALF);
 
         return this;
 
@@ -1763,19 +1814,15 @@ public final class Complex {
      */
     public final int compare(Complex z2) {
 
-        if(re > z2.re) {
+        if (re > z2.re) {
             return -1;
-        }
-        else if(re < z2.re) {
+        } else if (re < z2.re) {
             return 1;
-        }
-        else if(im > z2.im) {
+        } else if (im > z2.im) {
             return -1;
-        }
-        else if(z2.im > im) {
+        } else if (z2.im > im) {
             return 1;
-        }
-        else if(re == z2.re && im == z2.im) {
+        } else if (re == z2.re && im == z2.im) {
             return 0;
         }
 
@@ -1790,19 +1837,19 @@ public final class Complex {
             771.32342877765313, -176.61502916214059, 12.507343278686905,
             -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7};
         int g = 7;
-        if(re < 0.5) {
+        if (re < 0.5) {
             Complex pi = new Complex(Math.PI, 0);
-            return pi.divide((this.times(pi)).sin().times((this.r_sub(1.0)).gamma_la()));
+            return pi.divide_mutable((this.times(pi)).sin().times_mutable((this.r_sub(1.0)).gamma_la()));
         }
 
         Complex temp = this.sub(1.0);
         Complex a = new Complex(p[0], 0);
         Complex t = temp.plus(g + 0.5);
-        for(int i = 1; i < p.length; i++) {
-            a.plus_mutable(new Complex(p[i], 0).divide(temp.plus(i)));
+        for (int i = 1; i < p.length; i++) {
+            a.plus_mutable(new Complex(p[i], 0).divide_mutable(temp.plus(i)));
         }
 
-        return new Complex(Math.sqrt(2 * Math.PI), 0).times(t.pow(temp.plus(0.5))).times((t.negative()).exp()).times(a);
+        return new Complex(SQRT_TWO_PI, 0).times_mutable(t.pow(temp.plus(0.5))).times_mutable((t.negative()).exp()).times_mutable(a);
     }
 
     /*
@@ -1810,7 +1857,7 @@ public final class Complex {
      */
     public final Complex gamma_st() {
 
-        return (this.r_divide(2 * Math.PI)).sqrt().times((this.divide(Math.E)).pow(this));
+        return (this.r_divide(TWO_PI)).sqrt_mutable().times_mutable((this.divide(Math.E)).pow(this));
 
     }
 
@@ -1870,7 +1917,7 @@ public final class Complex {
      */
     public final Complex trunc() {
 
-        return new Complex((int)re, (int)im);
+        return new Complex((int) re, (int) im);
 
     }
 
@@ -1879,8 +1926,8 @@ public final class Complex {
      */
     public final Complex trunc_mutable() {
 
-        re = (int)re;
-        im = (int)im;
+        re = (int) re;
+        im = (int) im;
 
         return this;
 
@@ -1931,13 +1978,13 @@ public final class Complex {
 
     public final Complex toBiPolar(Complex a) {
 
-        return this.times(0.5).cot().times(a).times_i(1);
+        return this.times(0.5).cot().times_mutable(a).times_i_mutable(1);
 
     }
 
     public final Complex fromBiPolar(Complex a) {
 
-        return this.divide(a.times_i(1)).acot().times(2);
+        return this.divide(a.times_i(1)).acot().times_mutable(2);
 
     }
 
@@ -1946,43 +1993,42 @@ public final class Complex {
 
         Complex sum = new Complex();
 
-        for(int k = 0; k < 50; k++) {
+        for (int k = 0; k < 50; k++) {
             double temp = 2 * k + 1;
-            sum.plus_mutable((this.pow(temp).times(Math.pow(-1, k))).divide(new Complex(k, 0).factorial().times(temp)));
+            sum.plus_mutable((this.pow(temp).times_mutable(Math.pow(-1, k))).divide_mutable(new Complex(k, 0).factorial().times_mutable(temp)));
         }
 
-        return sum.times(2.0 / Math.sqrt(Math.PI));
+        return sum.times_mutable(2.0 / SQRT_PI);
 
     }
 
     /* Series approximation of the riemann zeta function  re > 0*/
-    public final Complex riemann_zeta_positive() {
-        
+    private final Complex riemann_zeta_positive() {
+
         Complex temp = this.r_sub(1);
         Complex temp2 = this.negative();
         Complex sum2 = new Complex();
 
-        for(int k = 1; k < 101; k++) {
-            sum2.plus_mutable((new Complex(-1, 0).pow(k - 1)).times(new Complex(k, 0).pow(temp2)));
+        for (int k = 1; k < 101; k++) {
+            sum2.plus_mutable((new Complex(-1, 0).pow(k - 1)).times_mutable(new Complex(k, 0).pow(temp2)));
         }
 
-        return sum2.divide((new Complex(1, 0).sub(new Complex(2, 0).pow(temp))));
-        
+        return sum2.divide_mutable(new Complex(2, 0).pow(temp).r_sub_mutable(1));
+
     }
 
     public final Complex riemann_zeta() {
 
-        if(re > 0) {
+        if (re > 0) {
             return this.riemann_zeta_positive();
-        }
-        else {
+        } else {
             Complex temp = this.r_sub(1);
 
             Complex gamma = temp.gamma_la();
 
             Complex sum2 = temp.riemann_zeta_positive();
 
-            return (new Complex(2, 0).pow(this)).times(new Complex(Math.PI, 0).pow(this.sub(1))).times(gamma).times(this.times(Math.PI * 0.5).sin()).times(sum2);
+            return (new Complex(2, 0).pow(this)).times_mutable(new Complex(Math.PI, 0).pow(this.sub(1))).times_mutable(gamma).times_mutable(this.times(HALF_PI).sin()).times_mutable(sum2);
         }
 
     }
@@ -1992,7 +2038,7 @@ public final class Complex {
      */
     public final Complex dirichlet_eta() {
 
-        return ((new Complex(2, 0).pow(this.r_sub(1))).r_sub(1)).times(this.riemann_zeta());
+        return ((new Complex(2, 0).pow(this.r_sub(1))).r_sub_mutable(1)).times_mutable(this.riemann_zeta());
 
     }
 
@@ -2000,7 +2046,7 @@ public final class Complex {
 
         Complex diff = this.sub(inf);
 
-        return inf.plus(diff.times_mutable(diff));
+        return inf.plus(diff.square_mutable());
 
     }
 
@@ -2010,10 +2056,9 @@ public final class Complex {
         real = real == 0.0 ? 0.0 : real;
         imaginary = imaginary == 0.0 ? 0.0 : imaginary;
 
-        if(imaginary >= 0) {
+        if (imaginary >= 0) {
             temp = real + "+" + imaginary + "i";
-        }
-        else {
+        } else {
             temp = real + "" + imaginary + "i";
         }
 
@@ -2025,13 +2070,11 @@ public final class Complex {
 
         String temp = "";
 
-        if(im > 0) {
+        if (im > 0) {
             temp = re + "+" + im + "i";
-        }
-        else if(im == 0) {
+        } else if (im == 0) {
             temp = re + "+" + (0.0) + "i";
-        }
-        else {
+        } else {
             temp = re + "" + im + "i";
         }
 
@@ -2087,12 +2130,11 @@ public final class Complex {
         double dy = im - center.im;
         double distance = dx * dx + dy * dy;
 
-        if(distance > radius2 || distance == 0) {
+        if (distance > radius2 || distance == 0) {
             return this;
-        }
-        else {
+        } else {
             double d = Math.sqrt(distance / radius2);
-            double t = Math.pow(Math.sin(Math.PI * 0.5 * d), -amount);
+            double t = Math.pow(Math.sin(HALF_PI * d), -amount);
 
             dx *= t;
             dy *= t;
@@ -2121,8 +2163,8 @@ public final class Complex {
         double dy = im - center.im;
         double r = Math.sqrt(dx * dx + dy * dy);
         double theta = Math.atan2(dy, dx) - angle - angle2;
-        theta = triangle((theta / Math.PI * sides * .5));
-        if(radius != 0) {
+        theta = triangle((theta / TWO_PI * sides));
+        if (radius != 0) {
             double c = Math.cos(theta);
             double radiusc = radius / c;
             r = radiusc * triangle(r / radiusc);
@@ -2141,10 +2183,9 @@ public final class Complex {
         double dx = re - center.re;
         double dy = im - center.im;
         double distance = dx * dx + dy * dy;
-        if(distance > radius2) {
+        if (distance > radius2) {
             return this;
-        }
-        else {
+        } else {
             distance = Math.sqrt(distance);
             double a = Math.atan2(dy, dx) + (angle * (radius - distance)) / radius;
             return new Complex(center.re + distance * Math.cos(a), center.im + distance * Math.sin(a));
@@ -2168,22 +2209,20 @@ public final class Complex {
         Complex out = new Complex(re, im);
         //Real modifier
         random = Math.random();
-        if(random < 0.5) {
+        if (random < 0.5) {
             random = Math.random() * distance.re;
             out.re -= random;
-        }
-        else {
+        } else {
             random = Math.random() * distance.re;
             out.re += random;
         }
 
         //Imaginary modifier
         random = Math.random();
-        if(random < 0.5) {
+        if (random < 0.5) {
             random = Math.random() * distance.im;
             out.im -= random;
-        }
-        else {
+        } else {
             random = Math.random() * distance.im;
             out.im += random;
         }
@@ -2193,17 +2232,17 @@ public final class Complex {
 
     public final Complex rotate(Complex degrees) {
 
-        Complex toDeg = degrees.divide(180.0).times(Math.PI);
+        Complex toDeg = degrees.divide(180.0).times_mutable(Math.PI);
 
-        return this.times((toDeg.times_i(1)).exp());
+        return this.times((toDeg.times_i_mutable(1)).exp());
 
     }
 
     public final Complex rotate_mutable(Complex degrees) {
 
-        Complex toDeg = degrees.divide(180.0).times(Math.PI);
+        Complex toDeg = degrees.divide(180.0).times_mutable(Math.PI);
 
-        return this.times_mutable((toDeg.times_i(1)).exp());
+        return this.times_mutable((toDeg.times_i_mutable(1)).exp());
 
     }
 
@@ -2211,22 +2250,20 @@ public final class Complex {
         double random;
         //Real modifier
         random = Math.random();
-        if(random < 0.5) {
+        if (random < 0.5) {
             random = Math.random() * distance.re;
             re -= random;
-        }
-        else {
+        } else {
             random = Math.random() * distance.re;
             re += random;
         }
 
         //Imaginary modifier
         random = Math.random();
-        if(random < 0.5) {
+        if (random < 0.5) {
             random = Math.random() * distance.im;
             im -= random;
-        }
-        else {
+        } else {
             random = Math.random() * distance.im;
             im += random;
         }
@@ -2259,16 +2296,28 @@ public final class Complex {
 
     }
 
+    /* more efficient z^2 + c */
+    public final Complex square_mutable_plus_c_mutable(Complex c) {
+
+        double temp = re * im;
+
+        re = (re + im) * (re - im) + c.re;
+        im = temp + temp + c.im;
+
+        return this;
+
+    }
+
     private double triangle(double x) {
         double r = mod(x, 1.0f);
         return 2.0f * (r < 0.5 ? r : 1 - r);
     }
 
     private double mod(double a, double b) {
-        int n = (int)(a / b);
+        int n = (int) (a / b);
 
         a -= n * b;
-        if(a < 0) {
+        if (a < 0) {
             return a + b;
         }
         return a;

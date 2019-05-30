@@ -21,6 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 package uk.co.cogitolearning.cogpar;
 
 /**
@@ -39,7 +40,7 @@ public class Test {
             ExpressionNode expr2 = parser.parse("--(+12/+3++4^+4/-2*+3/-2+-24/+3*+8/-2*+cos(0)+-(+10/-2-+3*-5))"); // 218 like wolfram
             ExpressionNode expr3 = parser.parse("12/3+4^4/(-2)*3/(-2)-24/3*8/(-2)*cos(0)-(10/(-2)-3*(-5))");
             ExpressionNode expr4 = parser.parse("--------2++++++-+++++i*----1");
-            ExpressionNode expr5 = parser.parse("(0.4+1.3i) % (0.6-3.33i)");
+            ExpressionNode expr5 = parser.parse("(0.6-3.33i) % (0.4+1.3i)");
             ExpressionNode expr6 = parser.parse("3%-4");
             ExpressionNode expr7 = parser.parse("inflect(2i*(1+sin(pi/2))^2 -3.0i, +12/+3++4^+4/-2*+3/-2+-24/+3*+8/-2*+cos(0)+-(+10/-2-+3*-5))");
             ExpressionNode expr8 = parser.parse("inflect(5i, 218)");
@@ -80,11 +81,11 @@ public class Test {
                 throw new AssertionError();
             }
             
-            if(val5.compare(new Complex(0.4, 1.3)) != 0) {
+            if(val5.compare(new Complex(0.09999999999999998, -0.33000000000000007)) != 0) {
                 throw new AssertionError();
             }
             
-            if(val6.compare(new Complex(3.0, 0.0)) != 0) {
+            if(val6.compare(new Complex(-1, 0.0)) != 0) {
                 throw new AssertionError();
             }
             
