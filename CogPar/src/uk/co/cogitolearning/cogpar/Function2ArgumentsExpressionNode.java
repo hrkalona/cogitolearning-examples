@@ -269,10 +269,13 @@ public class Function2ArgumentsExpressionNode implements ExpressionNode {
      *
      * If the function is not found this method throws an error.
      *
-     * @param str the name of the function
+     * @param stringInput the name of the function
      * @return the id of the function
      */
-    public static int stringToFunction(String str) {
+    public static int stringToFunction(String stringInput) {
+        
+        String str = stringInput.toLowerCase();
+        
         if (str.equals("bipol")) {
             return Function2ArgumentsExpressionNode.TO_BIPOLAR;
         }

@@ -106,8 +106,8 @@ public class Tokenizer
     tokenizer.add("[*/%]", Token.MULTDIVREM);
     tokenizer.add("\\^", Token.RAISED);
 
-    tokenizer.add("(" + FunctionExpressionNode.getAllFunctions() + ")(?!\\w)", Token.FUNCTION);
-    tokenizer.add("(" + Function2ArgumentsExpressionNode.getAllFunctions() + ")(?!\\w)", Token.FUNCTION_2ARGUMENTS);
+    tokenizer.add("(?i)(" + FunctionExpressionNode.getAllFunctions() + ")(?!\\w)", Token.FUNCTION);
+    tokenizer.add("(?i)(" + Function2ArgumentsExpressionNode.getAllFunctions() + ")(?!\\w)", Token.FUNCTION_2ARGUMENTS);
 
     tokenizer.add("\\(", Token.OPEN_BRACKET);
     tokenizer.add(",", Token.COMMA);
