@@ -86,5 +86,10 @@ public class SetVariable implements ExpressionNodeVisitor
   /** Do nothing */
   public void visit(Function2ArgumentsExpressionNode node)
   {}
+  
+  /** Do nothing */
+  @Override
+  public void visit(FunctionDerivative2ArgumentsExpressionNode node)
+  {}
 
 }

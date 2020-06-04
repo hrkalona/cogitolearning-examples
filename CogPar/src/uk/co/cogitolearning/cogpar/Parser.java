@@ -293,6 +293,19 @@ public class Parser {
             ExpressionNode expr[] = functionArgument2();
             return new Function2ArgumentsExpressionNode(function, expr[0], expr[1]);
         }
+        // argument -> FUNCTION_DERIVATIVE_2_ARG function_argument2
+        else if(lookahead.token == Token.FUNCTION_DERIVATIVE_2ARGUMENTS) {
+            int function = FunctionDerivative2ArgumentsExpressionNode.stringToFunction(lookahead.sequence);
+
+            nextToken();
+            ExpressionNode expr[] = functionArgument2();
+
+            if(!(expr[1] instanceof VariableExpressionNode)) {
+                throw new ParserException("The second argument of a derivative function must be a variable.", lookahead);
+            }
+
+            return new FunctionDerivative2ArgumentsExpressionNode(function, expr[0], expr[1]);
+        }
         // argument -> OPEN_BRACKET expression CLOSE_BRACKET
         else if(lookahead.token == Token.OPEN_BRACKET) {
             nextToken();
@@ -374,20 +387,28 @@ public class Parser {
 
         // value -> VARIABLE
         if(lookahead.token == Token.VARIABLE) {
-            RealConstantExpressionNode expr = null;
+            
+            if(lookahead.sequence.equalsIgnoreCase("pi") || lookahead.sequence.equalsIgnoreCase("e") || lookahead.sequence.equalsIgnoreCase("phi")) {
+                RealConstantExpressionNode expr = null;
 
-            if(lookahead.sequence.equalsIgnoreCase("pi")) {
-                expr = new RealConstantExpressionNode(Math.PI);
+                if(lookahead.sequence.equalsIgnoreCase("pi")) {
+                    expr = new RealConstantExpressionNode(Math.PI);
+                }
+
+                if(lookahead.sequence.equalsIgnoreCase("e")) {
+                    expr = new RealConstantExpressionNode(Math.E);
+                }
+
+                if(lookahead.sequence.equalsIgnoreCase("phi")) {
+                    expr = new RealConstantExpressionNode(1.618033988749895);
+                }
+
+                nextToken();
+                return expr;
             }
-
-            if(lookahead.sequence.equalsIgnoreCase("e")) {
-                expr = new RealConstantExpressionNode(Math.E);
-            }
-
-            if(lookahead.sequence.equalsIgnoreCase("phi")) {
-                expr = new RealConstantExpressionNode(1.618033988749895);
-            }
-
+            
+            ExpressionNode expr = new VariableExpressionNode(lookahead.sequence);
+            
             nextToken();
             return expr;
         }

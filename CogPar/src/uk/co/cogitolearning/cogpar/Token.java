@@ -58,6 +58,8 @@ public class Token
   public static final int FUNCTION_2ARGUMENTS = 10;
   /** Token id for comma */
   public static final int COMMA = 11;
+  /** Token id for function derivative names with 2 arguments*/
+  public static final int FUNCTION_DERIVATIVE_2ARGUMENTS = 12;
 
   /** the token identifier */
   public final int token;

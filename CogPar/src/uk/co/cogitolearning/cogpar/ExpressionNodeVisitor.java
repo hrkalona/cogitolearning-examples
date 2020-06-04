@@ -56,4 +56,7 @@ public interface ExpressionNodeVisitor
   
   /**  Visit a Function2ArgumentsExpressionNode */
   public void visit(Function2ArgumentsExpressionNode node);
+  
+  /**  Visit a FunctionDerivative2ArgumentsExpressionNode */
+  public void visit(FunctionDerivative2ArgumentsExpressionNode node);
 }

@@ -108,7 +108,8 @@ public class Tokenizer
 
     tokenizer.add("(?i)(" + FunctionExpressionNode.getAllFunctions() + ")(?!\\w)", Token.FUNCTION);
     tokenizer.add("(?i)(" + Function2ArgumentsExpressionNode.getAllFunctions() + ")(?!\\w)", Token.FUNCTION_2ARGUMENTS);
-
+    tokenizer.add("(?i)(" + FunctionDerivative2ArgumentsExpressionNode.getAllFunctions() + ")(?!\\w)", Token.FUNCTION_DERIVATIVE_2ARGUMENTS);
+    
     tokenizer.add("\\(", Token.OPEN_BRACKET);
     tokenizer.add(",", Token.COMMA);
     tokenizer.add("\\)", Token.CLOSE_BRACKET);

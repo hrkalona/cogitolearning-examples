@@ -44,8 +44,20 @@ public class Test {
             ExpressionNode expr6 = parser.parse("3%-4");
             ExpressionNode expr7 = parser.parse("inflect(2i*(1+sin(pi/2))^2 -3.0i, +12/+3++4^+4/-2*+3/-2+-24/+3*+8/-2*+cos(0)+-(+10/-2-+3*-5))");
             ExpressionNode expr8 = parser.parse("inflect(5i, 218)");
-
-            expr.accept(new SetVariable("pi", new Complex(Math.PI, 0)));
+            ExpressionNode expr9 = parser.parse("f'(1/3*z^3, z)");
+            ExpressionNode expr10 = parser.parse("f''(1/12*z^4, z)");
+            ExpressionNode expr11 = parser.parse("z^2");
+            ExpressionNode expr12 = parser.parse("z^3-1");
+            ExpressionNode expr13 = parser.parse("z * 3");
+            ExpressionNode expr14 = parser.parse("logn(z, c)");
+            
+            expr9.accept(new SetVariable("z", new Complex(-4.3242342, 5.534543)));
+            expr10.accept(new SetVariable("z", new Complex(-4.3242342, 5.534543)));
+            expr11.accept(new SetVariable("z", new Complex(-4.3242342, 5.534543)));
+            expr12.accept(new SetVariable("z", new Complex(1, 0)));
+            expr13.accept(new SetVariable("z", new Complex(1, 0)));
+            expr14.accept(new SetVariable("z", new Complex(3, 0)));
+            expr14.accept(new SetVariable("c", new Complex(6, 0)));
             
             Complex val1 = expr.getValue();
             Complex val2 = expr2.getValue();
@@ -55,6 +67,12 @@ public class Test {
             Complex val6 = expr6.getValue();
             Complex val7 = expr7.getValue();
             Complex val8 = expr8.getValue();
+            Complex val9 = expr9.getValue();
+            Complex val10 = expr10.getValue();
+            Complex val11 = expr11.getValue();
+            Complex val12 = expr12.getValue();
+            Complex val13 = expr13.getValue();
+            Complex val14 = expr14.getValue();
             
             System.out.println("The value of the expression is " + val1);
             System.out.println("The value of the expression is " + val2);
@@ -64,6 +82,12 @@ public class Test {
             System.out.println("The value of the expression is " + val6);
             System.out.println("The value of the expression is " + val7);
             System.out.println("The value of the expression is " + val8);
+            System.out.println("The value of the expression is " + val9);
+            System.out.println("The value of the expression is " + val10);
+            System.out.println("The value of the expression is " + val11);
+            System.out.println("The value of the expression is " + val12);
+            System.out.println("The value of the expression is " + val13);
+            System.out.println("The value of the expression is " + val14);
 
             if(val1.compare(new Complex(0.0, 5.0)) != 0) {
                 throw new AssertionError();
@@ -94,6 +118,26 @@ public class Test {
             }
             
             if(val8.compare(new Complex(47717.0, -2180.0)) != 0) {
+                throw new AssertionError();
+            }
+            
+            if(val9.distance(val10) > 1e-3) {
+                throw new AssertionError();
+            }
+            
+            if(val10.distance(val11) > 1e-3) {
+                throw new AssertionError();
+            }
+            
+            if(val12.compare(new Complex()) != 0) {
+                throw new AssertionError();
+            }
+            
+            if(val13.compare(new Complex(3, 0)) != 0) {
+                throw new AssertionError();
+            }
+            
+            if(val14.compare(new Complex(0.6131471927654585, 0)) != 0) {
                 throw new AssertionError();
             }
 
