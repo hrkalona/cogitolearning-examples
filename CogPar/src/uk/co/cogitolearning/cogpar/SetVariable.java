@@ -48,6 +48,10 @@ public class SetVariable implements ExpressionNodeVisitor
     this.name = name;
     this.value = value;
   }
+  
+  public void setValue(Complex value) {
+      this.value = value;
+  }
 
   /**
    * Checks the nodes name against the name to set and sets the value if the two

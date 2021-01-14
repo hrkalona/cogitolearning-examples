@@ -354,6 +354,11 @@ public class FunctionExpressionNode implements ExpressionNode {
      * function id for the squared norm function
      */
     public static final int SNORM = 70;
+    
+    /**
+     * function id for the fibonacci function
+     */
+    public static final int FIB = 71;
 
     /**
      * the function to apply the argument
@@ -635,6 +640,10 @@ public class FunctionExpressionNode implements ExpressionNode {
             case SNORM:
                 function = new NormSquaredFunction();
                 break;
+                
+            case FIB:
+                function = new FibonacciFunction();
+                break;
 
         }
     }
@@ -913,6 +922,10 @@ public class FunctionExpressionNode implements ExpressionNode {
         if (str.equals("snorm")) {
             return FunctionExpressionNode.SNORM;
         }
+        
+        if (str.equals("fib")) {
+            return FunctionExpressionNode.FIB;
+        }
 
         throw new ParserException("Unexpected Function " + str + " found.");
     }
@@ -928,7 +941,7 @@ public class FunctionExpressionNode implements ExpressionNode {
     public static String getAllFunctions() {
 
         return "sin|sinh|asin|asinh|cos|cosh|acos|acosh|tan|tanh|atan|atanh|cot|coth|acot|acoth|sec|sech|asec|asech|csc|csch|acsc|acsch|sqrt|exp|log|log10|log2|abs|conj|re|im|norm|arg|gamma|fact|absre|absim|gi|rec|flip|round|ceil|floor|trunc|erf|rzeta|deta" 
-                + "|vsin|avsin|vcos|avcos|cvsin|acvsin|cvcos|acvcos|hvsin|ahvsin|hvcos|ahvcos|hcvsin|ahcvsin|hcvcos|ahcvcos|exsec|aexsec|excsc|aexcsc|snorm";
+                + "|vsin|avsin|vcos|avcos|cvsin|acvsin|cvcos|acvcos|hvsin|ahvsin|hvcos|ahvcos|hcvsin|ahcvsin|hcvcos|ahcvcos|exsec|aexsec|excsc|aexcsc|snorm|fib";
         
     }
 

@@ -50,14 +50,18 @@ public class Test {
             ExpressionNode expr12 = parser.parse("z^3-1");
             ExpressionNode expr13 = parser.parse("z * 3");
             ExpressionNode expr14 = parser.parse("logn(z, c)");
+            ExpressionNode expr15 = parser.parse("f'''(1/60*z^5, z)");
             
             expr9.accept(new SetVariable("z", new Complex(-4.3242342, 5.534543)));
             expr10.accept(new SetVariable("z", new Complex(-4.3242342, 5.534543)));
             expr11.accept(new SetVariable("z", new Complex(-4.3242342, 5.534543)));
+            expr15.accept(new SetVariable("z", new Complex(-4.3242342, 5.534543)));
+
             expr12.accept(new SetVariable("z", new Complex(1, 0)));
             expr13.accept(new SetVariable("z", new Complex(1, 0)));
             expr14.accept(new SetVariable("z", new Complex(3, 0)));
             expr14.accept(new SetVariable("c", new Complex(6, 0)));
+
             
             Complex val1 = expr.getValue();
             Complex val2 = expr2.getValue();
@@ -73,6 +77,7 @@ public class Test {
             Complex val12 = expr12.getValue();
             Complex val13 = expr13.getValue();
             Complex val14 = expr14.getValue();
+            Complex val15 = expr15.getValue();
             
             System.out.println("The value of the expression is " + val1);
             System.out.println("The value of the expression is " + val2);
@@ -88,6 +93,7 @@ public class Test {
             System.out.println("The value of the expression is " + val12);
             System.out.println("The value of the expression is " + val13);
             System.out.println("The value of the expression is " + val14);
+            System.out.println("The value of the expression is " + val15);
 
             if(val1.compare(new Complex(0.0, 5.0)) != 0) {
                 throw new AssertionError();
@@ -126,6 +132,10 @@ public class Test {
             }
             
             if(val10.distance(val11) > 1e-3) {
+                throw new AssertionError();
+            }
+
+            if(val11.distance(val15) > 1e-3) {
                 throw new AssertionError();
             }
             

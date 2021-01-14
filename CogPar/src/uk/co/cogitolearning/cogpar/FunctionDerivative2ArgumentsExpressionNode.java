@@ -34,6 +34,11 @@ public class FunctionDerivative2ArgumentsExpressionNode implements ExpressionNod
      * function id for the second derivative function
      */
     public static final int SECOND_DERIVATIVE = 1;
+    
+    /**
+     * function id for the third derivative function
+     */
+    public static final int THIRD_DERIVATIVE = 2;
 
     /**
      * the function to apply to the arguments
@@ -49,6 +54,8 @@ public class FunctionDerivative2ArgumentsExpressionNode implements ExpressionNod
      * the second argument of the function
      */
     private ExpressionNode argument2;
+    
+    private SetVariable visitor;
 
     /**
      * Construct a function by id and argument.
@@ -62,6 +69,7 @@ public class FunctionDerivative2ArgumentsExpressionNode implements ExpressionNod
         this.functionId = functionId;
         this.argument = argument;
         this.argument2 = argument2;
+        visitor = new SetVariable(((VariableExpressionNode)argument2).getName(), null);
     }
 
     /**
@@ -92,6 +100,10 @@ public class FunctionDerivative2ArgumentsExpressionNode implements ExpressionNod
         if(str.equals("f''")) {
             return FunctionDerivative2ArgumentsExpressionNode.SECOND_DERIVATIVE;
         }
+        
+        if(str.equals("f'''")) {
+            return FunctionDerivative2ArgumentsExpressionNode.THIRD_DERIVATIVE;
+        }
 
 
         throw new ParserException("Unexpected Function " + str + " found.");
@@ -106,7 +118,7 @@ public class FunctionDerivative2ArgumentsExpressionNode implements ExpressionNod
      * @return a string containing all the function names
      */
     public static String getAllFunctions() {
-        return "f''|f'";
+        return "f'''|f''|f'";
     }
 
     /**
@@ -119,30 +131,51 @@ public class FunctionDerivative2ArgumentsExpressionNode implements ExpressionNod
     public Complex getValue() {
 
         Complex secondArgument = new Complex(argument2.getValue());
-        String variableName = ((VariableExpressionNode)argument2).getName();
 
         if(functionId == FIRST_DERIVATIVE) {
-
-            setDerivativeDelta(new SetVariable(variableName, secondArgument.plus(Derivative.DZ)));
+            visitor.setValue(secondArgument.plus(Derivative.DZ));
+            setDerivativeDelta(visitor);
             Complex fzdz = argument.getValue();
 
-            setDerivativeDelta(new SetVariable(variableName, secondArgument.sub(Derivative.DZ)));
+            visitor.setValue(secondArgument.sub(Derivative.DZ));
+            setDerivativeDelta(visitor);
             Complex fzmdz = argument.getValue();
 
             return Derivative.numericalCentralDerivativeFirstOrder(fzdz, fzmdz);
         }
         else if (functionId == SECOND_DERIVATIVE) {
             Complex fz = argument.getValue();
-            
-            setDerivativeDelta(new SetVariable(variableName, secondArgument.plus(Derivative.DZ)));
+
+            visitor.setValue(secondArgument.plus(Derivative.DZ));
+            setDerivativeDelta(visitor);
             Complex fzdz = argument.getValue();
 
-            setDerivativeDelta(new SetVariable(variableName, secondArgument.sub(Derivative.DZ)));
+            visitor.setValue(secondArgument.sub(Derivative.DZ));
+            setDerivativeDelta(visitor);
             Complex fzmdz = argument.getValue();
 
             return Derivative.numericalCentralDerivativeSecondOrder(fz, fzdz, fzmdz);
         }
+        else if (functionId == THIRD_DERIVATIVE) {
+            visitor.setValue(secondArgument.plus(Derivative.DZ));
+            setDerivativeDelta(visitor);
+            Complex fzdz = argument.getValue();
 
+            visitor.setValue(secondArgument.plus(Derivative.DZ_2));
+            setDerivativeDelta(visitor);
+            Complex fz2dz = argument.getValue();
+
+            visitor.setValue(secondArgument.sub(Derivative.DZ));
+            setDerivativeDelta(visitor);
+            Complex fzmdz = argument.getValue();
+
+            visitor.setValue(secondArgument.sub(Derivative.DZ_2));
+            setDerivativeDelta(visitor);
+            Complex fzm2dz = argument.getValue();
+
+            return Derivative.numericalCentralDerivativeThirdOrder(fzdz, fz2dz, fzmdz, fzm2dz);
+        }
+        
         return new Complex();
         
     }
